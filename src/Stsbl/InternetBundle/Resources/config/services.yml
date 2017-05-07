@@ -31,7 +31,7 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: stsbl_internet_nac_validator }
     
-    stsbl.filedistribution.menu:
+    stsbl.internet.menu:
         class: Stsbl\InternetBundle\EventListener\MenuListener # Out MenuListener Class
         arguments: ["@iserv.config"]
         tags:
