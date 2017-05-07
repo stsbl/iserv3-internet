@@ -1,0 +1,40 @@
+{% extends 'IServCrudBundle:Crud:index.html.twig' %}
+
+{% block crud_actions %}
+
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ _('Create new NACs') }}</h3>
+                </div>
+                <div class="panel-body print-new-pac">
+                    {{ form_start(addForm) }}
+                    {{ form_row(addForm.value) }}
+                    {{ form_end(addForm) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12 clearfix mb">
+            <div class="btn-toolbar pull-right">
+                <a class="btn btn-default" href="{{ path('internet_manage_nacs_print') }}" target="_blank">{{ icon('print') }}{{ _('Print unassigned NACs') }}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock crud_actions %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if not app.request.xmlHttpRequest %}
+        {% if app.environment != 'prod' %}
+            <!-- {{ _self }} => printnacs.js -->
+        {% endif %}
+        {% javascripts output='js/compiled/printnacs.js' filter='?uglifyjs2'
+        '@StsblInternetBundle/Resources/public/js/printnacs.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+    {% endif %}
+{% endblock %}

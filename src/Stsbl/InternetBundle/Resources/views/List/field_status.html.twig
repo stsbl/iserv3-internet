@@ -1,0 +1,10 @@
+{# src/Stsbl/InternetBundle/Resources/views/List/field_status.html.twig #}
+{% extends admin.getTemplate('list_field_base') %}
+
+{% block field %}
+    {% if value is null %}
+        {{ _('Offline') }}
+    {% else %}
+        {{ value }}
+    {% endif %}
+{% endblock %}

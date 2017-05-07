@@ -1,0 +1,6 @@
+{# src/Stsbl/InternetBundle/Resources/views/List/field_interval.html.twig #}
+{% extends admin.getTemplate('list_field_base') %}
+
+{% block field %}
+    {{ value|linterval }}
+{% endblock %}

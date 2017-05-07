@@ -1,0 +1,39 @@
+services:
+    stsbl.internet.nac_manager:
+        class: Stsbl\InternetBundle\Service\NacManager
+        arguments: ["@iserv.security_handler", "@request_stack", "@iserv.shell", "@doctrine", "@iserv.logger"]
+        
+    stsbl.internet.twig.extension.time:
+        class: Stsbl\InternetBundle\Twig\Extension\Time
+        arguments: ["@doctrine.dbal.connection_factory"]
+        tags :
+          - { name: twig.extension }
+          
+    stsbl.internet.print.nac:
+        class: Stsbl\InternetBundle\Crud\NacCrud
+        arguments: [Stsbl\InternetBundle\Entity\Nac]
+        calls:
+            - [ setLogger, ["@iserv.logger"] ]
+            - [ setObjectManager, ["@stsbl.internet.nac_object_manager"] ]
+            - [ setTwigTimeExtension, ["@stsbl.internet.twig.extension.time"] ]
+            - [ setManager, ["@stsbl.internet.nac_manager"] ]
+            - [ setConfig, ["@iserv.config"] ]
+        tags:
+            - { name: iserv.crud }
+            
+    stsbl.internet.nac_object_manager:
+        class: Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager
+        arguments: ["@doctrine"]
+
+    stsbl.internet.validator.nac:
+        class: Stsbl\InternetBundle\Validator\Constraints\NacValidator
+        arguments: ["@doctrine.orm.entity_manager", "@iserv.security_handler"]
+        tags:
+            - { name: validator.constraint_validator, alias: stsbl_internet_nac_validator }
+    
+    stsbl.filedistribution.menu:
+        class: Stsbl\InternetBundle\EventListener\MenuListener # Out MenuListener Class
+        arguments: ["@iserv.config"]
+        tags:
+          - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu } # Tells IServ about the main menu method
+          #- { name: kernel.event_listener, event: iserv_portal.menu_admin, method: onBuildAdminMenu } # Tells IServ about the admin menu method

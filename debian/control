@@ -1,0 +1,13 @@
+Source: stsbl-iserv3-internet
+Section: misc
+Priority: extra
+Maintainer: Stadtteilschule Blankenese <repository@stsbl.de>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+
+Package: stsbl-iserv3-internet
+Architecture: all
+Depends: iserv-internet
+Description: IServ 3: Internet
+ Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs in IServ.
+Tag: suite::iserv:portal, role::plugin

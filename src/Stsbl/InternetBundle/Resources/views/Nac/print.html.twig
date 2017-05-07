@@ -1,0 +1,18 @@
+<html>
+    <head>
+    <style type="text/css">
+body {
+    font: 13px/18px "Lucida Grande",Verdana,sans-serif;
+}
+p {
+    margin: 0.5em 0px;
+}
+    </style>
+    </head>
+<body onload="self.print();" style="font-size: 12pt;">
+    {{ __('NACs created by: %s', currentUser.name) }}
+    {% for nac in nacs %}
+        <p><b>{{ nac.nac }}:</b> {{ nac.remain|linterval }}</p>{# TODO: Currency formatter function? #}
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,5 @@
+debian/stsbl-iserv3-internet/*
+debian/stsbl-iserv3-internet.substvars
+debian/stsbl-iserv3-internet.debhelper.log
+debian/files
+debian/debhelper-build-stamp

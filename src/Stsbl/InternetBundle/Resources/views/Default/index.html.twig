@@ -1,0 +1,106 @@
+{# src/Stsbl/InternetBundle/Resources/views/Default/index.html.twig #}
+{% extends 'IServCoreBundle::page.html.twig' %}
+
+{% set nacManager = controller.getNacManager() %}
+{% set networkService = controller.getNetworkService() %}
+
+{% block page_title %}
+    {% spaceless %}
+        {{ _('Internet') }}
+    {% endspaceless %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    {% if app.environment != 'prod' %}
+        <!-- {{ _self }} => internet.css -->
+    {% endif %}
+    {% stylesheets '@StsblInternetBundle/Resources/public/css/internet.less' filter='cssrewrite' filter='?uglifycss' output='css/compiled/internet.css' %}
+     <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+    
+{% block content %}
+    {% if is_granted('PRIV_INET_NACS') %}
+        <div class="row mb">
+            <div class="col-md-12">
+                <div class="btn-toolbar pull-right">
+                    <a class="btn btn-link" href="{{ path('internet_manage_nac_index') }}">{{ icon('cog') }}{{ _('Manage NACs') }}</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {{ _('Internet Access') }}
+            </h3>
+        </div>
+        <div class="panel-body">
+            {% if not networkService.isIpInLan() %}
+                <div class="media-left">
+                    {{ ico('world-denied', 48) }}
+                </div>
+                <div class="media-body">
+                    <p>
+                        <strong>{{ _('Internet activation not possible') }}</strong><br />
+                        {{ _('The internet activation is only available from LAN hosts.') }}
+                    </p>
+            {% elseif networkService.isIpInLan(app.request.clientIp) and nacManager.isInternetDenied() is not null and nacManager.isInternetDenied() %}
+                <div class="media-left">
+                    {{ ico('world-denied', 48) }}
+                </div>
+                <div class="media-body">
+                    <p>
+                        <strong>{{ _('Internet access denied') }}</strong><br />
+                        {{ __('By: %s', nacManager.getInternetInformation().by) }}<br />
+                        {{ __('Until: %s', nacManager.getInternetInformation().until|smart_date) }}<br />
+                        {% if nacManager.hasNac() and nacManager.getUserNac().timer is not null %}
+                            {{ _('You still have an active NAC. You may revoke it now:') }}<br />
+                            <a href="index.html.twig"></a>
+                            {{ form(form, {style: null}) }}
+                        {% endif %}
+                    </p>
+                </div>
+            {% elseif networkService.isIpInLan(app.request.clientIp) and nacManager.isInternetGranted() %}
+                <div class="media-left">
+                    {{ ico('world', 48) }}
+                </div>
+                <div class="media-body">
+                    <p>
+                        <strong>{{ _('Internet access granted') }}</strong><br />
+                        {{ __('By: %s', nacManager.getInternetInformation().by) }}<br />
+                        {{ __('Until: %s', nacManager.getInternetInformation().until|smart_date) }}<br />
+                        {% if nacManager.hasNac() and (nacManager.userNac.timer is not null) %}
+                            {{ _('You still have an active NAC. You may revoke it now:') }}<br />
+                            {{ form(form, {style: null}) }}
+                        {% endif %}
+                    </p>
+                </div>
+            {% else %}
+                <div class="media-left">
+                    {{ ico('world-clock', 48) }}
+                </div>
+                <div class="media-body">
+                {% if nacManager.hasNac() %}
+                    {% set nac = nacManager.getUserNac() %}
+                    {% if nac.timer is not null %}
+                        <p>
+                            <strong>{{ _('Internet access granted') }}</strong><br />
+                            {{ __('Until: %s', nac.timer|smart_date) }}
+                        </p>
+                    {% else %}
+                        <p>
+                            <strong>{{ _('Internet access denied') }}</strong><br />
+                            {{ __('Remaining time: %s', nac.remain|linterval) }}
+                        </p>
+                    {% endif %}
+                {% endif %}
+                    {{ form(form, {style: null}) }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+    
