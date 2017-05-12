@@ -125,13 +125,12 @@ class NacCrud extends AbstractCrud
             ->add('nac', null, array('label' => _('NAC'), 'responsive' => 'all'))
             ->add('owner', 'entity', array('label' => _('Created by'), 'responsive' => 'desktop'))
             ->add('created', 'datetime', array('label' => _('Created on'), 'responsive' => 'desktop'))
-            ->add('expire', 'datetime', array('label' => _('Expires on'), 'responsive' => 'desktop'))
             ->add('remain', null, array(
                 'template' => 'StsblInternetBundle:List:field_interval.html.twig',
                 'label' => _('Remaining'),
                 'responsive' => 'min-mobile',
             ))
-            ->add('user', 'entity', array('label' => _('Assigned to'), 'responsive' => 'min-tablet'))
+            ->add('user', 'entity', array('label' => _('Assigned to'), 'responsive' => 'all'))
             ->add('assigned', 'datetime', array('label' => _('Assigned on'), 'responsive' => 'desktop'))
             ->add('ip', null, array(
                 'template' => 'StsblInternetBundle:List:field_status.html.twig',
