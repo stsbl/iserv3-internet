@@ -1,3 +1,13 @@
+stsbl-iserv3-internet (17.05.12-0) experimental; urgency=medium
+
+  [ Felix Jacobi ]
+  * Removed expiration from NAC admin.
+  * Improved mobile view of NAC admin.
+  * Fixed package description.
+  * Updated l10n.
+
+ -- Stadtteilschule Blankenese <repository@stsbl.de>  Fri, 12 May 2017 23:29:07 +0200
+
 stsbl-iserv3-internet (17.05.07-1) experimental; urgency=medium
 
    [ Felix Jacobi ]
