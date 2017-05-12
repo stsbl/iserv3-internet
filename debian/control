@@ -9,5 +9,5 @@ Package: stsbl-iserv3-internet
 Architecture: all
 Depends: iserv-internet
 Description: IServ 3: Internet
- Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs in IServ.
+ Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs in IServ 3.
 Tag: suite::iserv:portal, role::plugin
