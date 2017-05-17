@@ -37,7 +37,7 @@ use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
 class Time extends \Twig_Extension
 {
     private $connectionFactory;
-    
+
     /**
      * The constructor
      * 
@@ -47,7 +47,7 @@ class Time extends \Twig_Extension
     {
         $this->connectionFactory = $connectionFactory;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -58,7 +58,7 @@ class Time extends \Twig_Extension
             'smart_date' => new \Twig_SimpleFilter('smart_date', [$this, 'smartDate']),
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -66,7 +66,7 @@ class Time extends \Twig_Extension
     {
         return 'time';
     }
-    
+
     /**
      * Converts postgresql interval in a human readable string.
      * 
@@ -82,7 +82,7 @@ class Time extends \Twig_Extension
         $statement->execute([$interval]);
         $seconds = (float)$statement->fetch()['date_part'];
         $db->close();
-        
+
         $a['d'] = floor($seconds / 86400);
         $a['h'] = floor($seconds / 3600) % 24;
         $a['m'] = floor($seconds / 60) % 60;
@@ -93,10 +93,10 @@ class Time extends \Twig_Extension
                 $res[] = sprintf($res? '%02d': '%d', $v).$key;
             }
         }
-        
+
         return join(' ', $res);
     }
-    
+
     /**
      * Example: 8:30 AM; So, 11:15 PM; Dec 24th; Jan 1st, 05
      * 
@@ -106,7 +106,7 @@ class Time extends \Twig_Extension
     public function smartDate(\DateTime $dateTime)
     {
         $date = $dateTime->getTimestamp();
-        
+
         if (date("Ymd") == date("Ymd", $date)) {
             return $this->translateDate("%#I:%M %p", $date);
         }
@@ -116,10 +116,10 @@ class Time extends \Twig_Extension
         if (date("Y") == date("Y", $date)) {
             return $this->translateDate("%b %#d#", $date);
         }
-        
+
         return $this->translateDate("%b %#d#, %y", $date);
     }
-    
+
     /** 
      * format $ts according to locale settings
      *
@@ -138,13 +138,13 @@ class Time extends \Twig_Extension
             $str = $m[1].(int)strftime("%$m[2]", $ts).$m[3];
         }
         $str = strftime($str, $ts);
-        
+
         while (preg_match("/(.*?)(\d+)#(.*)/", $str, $m)) {
             $str = $m[1]._($this->appendOrdSuffix($m[2])).$m[3];
         }
         return $str;
     }
-    
+
     /**
      * ..., 1 => st, 2 => nd, 3 => rd, 4 => th, ..., 21 => st, ...
      * 

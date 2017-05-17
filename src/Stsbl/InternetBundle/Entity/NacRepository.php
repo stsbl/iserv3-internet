@@ -50,7 +50,7 @@ class NacRepository extends EntitySpecificationRepository
             return false;
         }
     }
-    
+
     /**
      * Get current NAC for user.
      * 
@@ -62,7 +62,7 @@ class NacRepository extends EntitySpecificationRepository
         if (!$this->hasNac($user)) {
             throw new \RuntimeException(sprintf('User %s has no NAC!', (string)$user));
         }
-        
+
         return $this->findOneBy(['user' => $user]);
     }
 }

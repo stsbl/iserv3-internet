@@ -12,7 +12,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    
+
     {% if app.environment != 'prod' %}
         <!-- {{ _self }} => internet.css -->
     {% endif %}
@@ -20,7 +20,7 @@
      <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 {% endblock %}
-    
+
 {% block content %}
     {% if is_granted('PRIV_INET_NACS') %}
         <div class="row mb">
@@ -103,4 +103,3 @@
         </div>
     </div>
 {% endblock %}
-    

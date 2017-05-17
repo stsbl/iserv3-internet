@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraint;
 class Nac extends Constraint
 {
     public $message = 'This is not a valid NAC.';
-    
+
     /**
      * {@inheritdoc}
      */
@@ -46,7 +46,7 @@ class Nac extends Constraint
     {
         return 'stsbl_internet_nac_validator';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -54,7 +54,7 @@ class Nac extends Constraint
     {
         return self::PROPERTY_CONSTRAINT;
     }
-    
+
     /**
      * @return string
      */
@@ -62,7 +62,7 @@ class Nac extends Constraint
     {
         return _('This is not a valid NAC.');
     }
-    
+
     /**
      * @return string
      */
@@ -70,7 +70,7 @@ class Nac extends Constraint
     {
         return _('This is not a valid NAC. A NAC consists of eight numbers.');
     }
-    
+
     /**
      * @return string
      */
@@ -78,7 +78,7 @@ class Nac extends Constraint
     {
         return _('You not own this NAC.');
     }
-    
+
     /**
      * {@inheritdoc}
      */

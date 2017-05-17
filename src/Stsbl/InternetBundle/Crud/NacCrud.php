@@ -49,17 +49,17 @@ class NacCrud extends AbstractCrud
      * @var \IServ\CoreBundle\Service\Logger
      */
     private $logger;
-    
+
     /**
      * @var Time
      */
     private $time;
-    
+
     /**
      * @var NacManager
      */
     private $manager;
-    
+
     /**
      * @var Config
      */
@@ -95,7 +95,7 @@ class NacCrud extends AbstractCrud
 
         $this->routes['index']['_controller'] = 'StsblInternetBundle:Nac:index';
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -111,7 +111,7 @@ class NacCrud extends AbstractCrud
             $msg = sprintf('NAC "%s" mit %s verbleibender Zeit erstellt von "%s" und vergeben an "%s" gelöscht', $nac->getId(), $value, $nac->getOwner()->getName(), $nac->getUser()->getName());
         }
         $this->logger->write($msg, null, 'Internet');
-        
+
         // run inet_timer to disable deleted NACs
         $this->manager->inetTimer();
     }
@@ -138,24 +138,24 @@ class NacCrud extends AbstractCrud
                 'responsive' => 'desktop'))
         ;
     }
-    
+
     /*** SETTERS ***/
-    
+
     public function setLogger(Logger $logger)
     {
         $this->logger = $logger;
     }
-    
+
     public function setTwigTimeExtension(Time $time)
     {
         $this->time = $time;
     }
-    
+
     public function setManager(NacManager $manager)
     {
         $this->manager = $manager;
     }
-    
+
     public function setConfig(Config $config)
     {
         $this->config = $config;
@@ -182,14 +182,14 @@ class NacCrud extends AbstractCrud
     {
         return false;
     }
-    
+
     public function getFilterSpecification() 
     {
         // no filtering for admins
         if ($this->getUser()->isAdmin()) {
             return;
         }
-        
+
         return new PropertyMatchSpecification('owner', $this->getUser()->getUsername());
     }
 

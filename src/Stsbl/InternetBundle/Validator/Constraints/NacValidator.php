@@ -44,12 +44,12 @@ class NacValidator extends ConstraintValidator
      * @var EntityManager
      */
     private $em;
-    
+
     /**
      * @var SecurityHandler
      */
     private $securityHandler;
-    
+
     /**
      * The constructor
      * 
@@ -61,7 +61,7 @@ class NacValidator extends ConstraintValidator
         $this->em = $em;
         $this->securityHandler = $securityHandler;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -72,15 +72,15 @@ class NacValidator extends ConstraintValidator
             $this->context->buildViolation($constraint->getWrongFormatMessage())->atPath('nac')->addViolation();
             return;
         }
-        
+
         /* @var $nacEntity \Stsbl\InternetBundle\Entity\Nac */
         $nacEntity = $this->em->getRepository('StsblInternetBundle:Nac')->findOneByNac($nac);
-        
+
         if ($nacEntity === null) {
             $this->context->buildViolation($constraint->getInvalidNacMessage())->atPath('nac')->addViolation();
             return;
         }
-        
+
         if ($nacEntity->getUser() != $this->securityHandler->getUser() && $nacEntity->getUser() != null) {
             $this->context->buildViolation($constraint->getWrongOwnerMessage())->atPath('nac')->addViolation();
         }

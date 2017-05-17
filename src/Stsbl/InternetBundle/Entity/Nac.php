@@ -47,7 +47,7 @@ class Nac implements CrudInterface
      * @var string
      */
     private $nac;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\IServ\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="owner", referencedColumnName="act")
@@ -55,7 +55,7 @@ class Nac implements CrudInterface
      * @var User
      */
     private $owner;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\IServ\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="act", referencedColumnName="act")
@@ -63,7 +63,7 @@ class Nac implements CrudInterface
      * @var User
      */
     private $user;
-    
+
     /**
      * @ORM\Column(type="inet", nullable=true)
      * @Assert\NotBlank()
@@ -72,7 +72,7 @@ class Nac implements CrudInterface
      * @var string
      */
     private $ip;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      * @ORM\Id
@@ -81,28 +81,28 @@ class Nac implements CrudInterface
      * @var string
      */
     private $remain;
-    
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTime
      */
     private $timer;
-    
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTime
      */
     private $expire;
-    
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTime
      */
     private $created;
-    
+
     /**
      * @ORM\Column(type="datetime", nullable=true)
      *

@@ -2,13 +2,13 @@ services:
     stsbl.internet.nac_manager:
         class: Stsbl\InternetBundle\Service\NacManager
         arguments: ["@iserv.security_handler", "@request_stack", "@iserv.shell", "@doctrine", "@iserv.logger"]
-        
+
     stsbl.internet.twig.extension.time:
         class: Stsbl\InternetBundle\Twig\Extension\Time
         arguments: ["@doctrine.dbal.connection_factory"]
         tags :
           - { name: twig.extension }
-          
+  
     stsbl.internet.print.nac:
         class: Stsbl\InternetBundle\Crud\NacCrud
         arguments: [Stsbl\InternetBundle\Entity\Nac]
@@ -20,7 +20,7 @@ services:
             - [ setConfig, ["@iserv.config"] ]
         tags:
             - { name: iserv.crud }
-            
+
     stsbl.internet.nac_object_manager:
         class: Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager
         arguments: ["@doctrine"]
@@ -30,7 +30,7 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@iserv.security_handler"]
         tags:
             - { name: validator.constraint_validator, alias: stsbl_internet_nac_validator }
-    
+
     stsbl.internet.menu:
         class: Stsbl\InternetBundle\EventListener\MenuListener # Out MenuListener Class
         arguments: ["@iserv.config"]

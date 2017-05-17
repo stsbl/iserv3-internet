@@ -51,7 +51,7 @@ class DefaultController extends PageController
     {
         return $this->get('stsbl.internet.nac_manager');
     }
-    
+
     /**
      * Get Network service
      * 
@@ -61,7 +61,7 @@ class DefaultController extends PageController
     {
         return $this->get('iserv.host.network');
     }
-    
+
     /**
      * Get NAC form
      * 
@@ -71,7 +71,7 @@ class DefaultController extends PageController
     {
         /* @var $builder \Symfony\Component\Form\FormBuilder */
         $builder = $this->get('form.factory')->createNamedBuilder('nac');
-        
+
         if (!$this->getNacManager()->hasNac()) {
             $builder
                 ->add('nac', TextType::class, [
@@ -84,7 +84,7 @@ class DefaultController extends PageController
                 ])
             ;
         }
-        
+
         if (($this->getNacManager()->hasNac() && $this->getNacManager()->getUserNac()->getTimer() == null) || !$this->getNacManager()->hasNac()) {
             $builder
                 ->add('grant', SubmitType::class, [
@@ -102,7 +102,7 @@ class DefaultController extends PageController
                 ])
             ;
         }
-        
+
         return $builder->getForm();
     }
     /**
@@ -116,16 +116,16 @@ class DefaultController extends PageController
         if (!$this->get('iserv.config')->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
         }
-        
+
         $form = $this->getNacForm();
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $nac = null;
             if (isset($form->getData()['nac'])) {
                 $nac = $form->getData()['nac'];
             }
-            
+
             if ($form->has('grant') && $form->get('grant')->isClicked()) {
                 $this->getNacManager()->grantInternet($nac);
                 $this->get('iserv.flash')->success(_('Internet access with NAC successful granted.'));
@@ -133,13 +133,13 @@ class DefaultController extends PageController
                 $this->getNacManager()->revokeInternet($request->getClientIp());
                 $this->get('iserv.flash')->success(_('Internet access with NAC successful revoked.'));
             }
-            
+
             return $this->redirect($this->generateUrl('internet_index'));
         }
-        
+
         // track path
         $this->addBreadcrumb(_('Internet'), $this->generateUrl('internet_index'));
-        
+
         return [
             'form' => $form->createView(),
             'controller' => $this,

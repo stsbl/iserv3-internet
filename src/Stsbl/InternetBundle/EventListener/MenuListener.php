@@ -43,7 +43,7 @@ class MenuListener implements MainMenuListenerInterface
      * @var Config
      */
     private $config;
-    
+
     /**
      * The constructor.
      * 
@@ -53,7 +53,7 @@ class MenuListener implements MainMenuListenerInterface
     {
         $this->config = $config;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -63,14 +63,14 @@ class MenuListener implements MainMenuListenerInterface
         if (!$this->config->get('Activation')) {
             return;
         }
-        
+
         $menu = $event->getMenu(MenuBuilder::GROUP_NETWORK);
-        
+
         $item = $menu->addChild('internet', [
                 'route' => 'internet_index',
                 'label' => _('Internet'),
             ]);
-            
+
         $item->setExtra('icon', 'world-plug');
     }
 

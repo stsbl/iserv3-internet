@@ -44,7 +44,7 @@ class NacObjectManager extends ORMObjectManager
         $om = $this->registry->getManager();
         $classMetadata = $om->getClassMetadata($class);
         $idReader = new IdReader($om, $classMetadata);
-        
+
         return $idReader->getIdField();
     }
 }

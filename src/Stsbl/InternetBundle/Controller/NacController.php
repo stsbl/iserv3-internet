@@ -62,7 +62,7 @@ class NacController extends CrudController
 
             if ($created > 0) {
                 $this->get('iserv.flash')->success(_n('The NAC has been created.', 'The NACs have been created.', $created));
-                
+
                 return $this->redirect($this->generateUrl('internet_manage_nac_index'));
             }
 
@@ -86,7 +86,7 @@ class NacController extends CrudController
         if (!$this->get('iserv.config')->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
         }
-        
+
         $nacs = $this->getDoctrine()->getRepository('StsblInternetBundle:Nac')->findBy(array(
             'user' => null,
             'owner' => $this->getUser(),

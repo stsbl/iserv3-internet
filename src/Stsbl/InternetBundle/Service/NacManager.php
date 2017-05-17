@@ -55,37 +55,37 @@ class NacManager
      * @var EntityManager
      */
     private $em;
-    
+
     /**
      * @var SecurityHandler
      */
     private $securityHandler;
-    
+
     /**
      * @var Request
      */
     private $request;
-    
+
     /**
      * @var Shell
      */
     private $shell;
-    
+
     /**
      * @var Connection
      */
     private $connection;
-    
+
     /**
      * @var Logger
      */
     private $logger;
-    
+
     /**
      * @var array
      */
     private $nacWarnings = [];
-    
+
     /**
      * The constructor
      * 
@@ -103,7 +103,7 @@ class NacManager
         $this->connection = $doctine->getConnection();
         $this->logger = $logger;
     }
-    
+
     /**
      * Checks if user have a NAC.
      * If no user given, assume the current one.
@@ -131,9 +131,9 @@ class NacManager
     {
         /* @var $nacRepository \Stsbl\InternetBundle\Entity\NacRepository */
         $nacRepository = $this->em->getRepository('StsblInternetBundle:Nac');
-        return $nacRepository->findNacByUser($this->getUser($user));        
+        return $nacRepository->findNacByUser($this->getUser($user));
     }
-    
+
     /**
      * Shortcut to determine user (return user from security handler, if user is null).
      * 
@@ -145,14 +145,14 @@ class NacManager
         if ($user === null) {
             $user = $this->securityHandler->getUser();
         }
-        
+
         return $user;
     }
-    
+
     /**
      * Check if internet access is already granted to the current client.
      * 
-     * @return boolean     
+     * @return boolean 
      */
     public function isInternetGranted()
     {
@@ -160,7 +160,7 @@ class NacManager
         if ($this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp()) === null) {
             return false;
         }
-        
+
         try {
             return $this->em->getRepository('IServHostBundle:Host')->findOneBy(['internet' => true, 'overrideRoute' => null, 'ip' => $this->request->getClientIp()]) != null;
         } catch (NoResultException $e) {
@@ -171,7 +171,7 @@ class NacManager
             }
         }
     }
-    
+
     /**
      * Get internet information (overrideUntil and overrideBy).
      * 
@@ -181,24 +181,24 @@ class NacManager
     {
         /* @var $host \IServ\HostBundle\Entity\Host */
         $host = $this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp());
-        
+
         if ($host === null) {
             return [
                 'until' => null,
                 'by' => null,
             ];
         }
-        
+
         return [
             'until' => $host->getOverrideUntil(),
             'by' => $this->em->getRepository('IServCoreBundle:User')->findOneByUsername($host->getOverrideBy()),
         ];
     }
-    
+
     /**
      * Check if internet access is explicity denied for the current client.
      * 
-     * @return boolean     
+     * @return boolean 
      */
     public function isInternetDenied()
     {
@@ -208,7 +208,7 @@ class NacManager
             return false;
         }
     }
-    
+
     /**
      * Runs inet_timer.
      * 
@@ -218,14 +218,14 @@ class NacManager
     {
         system("killall -q -SIGHUP -r '^inet_timer:' || ".
             "killall -q -SIGHUP 'inet_timer'", $err);
-        
+
         if ($err) {
             return $this->shellMsgError('closefd', ['/usr/lib/iserv/inet_timer', '-d']);
         } else {
             return new FlashMessageBag();
         }
     }
-    
+
     /**
      * Execute a command and return a FlashMessageBag with STDERR 
      * lines as error messages.
@@ -249,7 +249,7 @@ class NacManager
 
         return $messages;
     }
-    
+
     /**
      * Create bunch of NACs using NAC management form
      *
@@ -260,7 +260,7 @@ class NacManager
     public function createNacsByForm(Form $addForm, User $creator)
     {
         $this->nacWarnings = [];
-        
+
         // NAC template - new NACs are cloned from this object
         $nacTpl = new Nac();
         $nacTpl->setNac($addForm['value']->getData());
@@ -360,7 +360,7 @@ class NacManager
     public function insertNac(Nac $nac)
     {
         $expire = date('c', time() + 60 * 60 * 24 * 30);
-        
+
         $nacData = array(
             'act' => $nac->getUser() === null ? null : $nac->getUser()->getUsername(),
             'owner' => $nac->getOwner() === null ? null : $nac->getOwner()->getUsername(),
@@ -396,7 +396,7 @@ class NacManager
     {
         return sprintf("%08d", rand(0, 99999999));
     }
-    
+
     /**
      * Get warnings thrown during NAC creation
      * 
@@ -406,7 +406,7 @@ class NacManager
     {
         return $this->nacWarnings;
     }
-    
+
     /**
      * Unlock access to Internet with NAC.
      * If no NAC supplied, the auto detection of current NAC will tried.
@@ -423,28 +423,28 @@ class NacManager
             $nacData = $this->getUserNac();
             $nac = $nacData->getNac();
         }
-        
+
         if ($nacData->getAssigned() === null) {
             $nacData->setAssigned(new \DateTime('now'));
             $this->em->persist($nacData);
             $this->em->flush();
         }
-                
+
         $rsm = new ResultSetMapping();
         /* @var $nq \Doctrine\ORM\NativeQuery */
         $nq = $this->em->createNativeQuery('UPDATE nacs SET Timer = now() + Remain, '.
             'Act = :1, IP = :2 WHERE Nac = :3', $rsm);
-                
+
         $nq
             ->setParameter(1, $this->getUser()->getUsername())
             ->setParameter(2, $this->request->getClientIp())
             ->setParameter(3, $nac)
             ->execute()
         ;
-        
+
         return $this->inetTimer();
     }
-    
+
     /**
      * Revoke access to Internet with NAC.
      * If no NAC supplied, the auto detection of current NAC will tried.
@@ -458,13 +458,13 @@ class NacManager
         /* @var $nq \Doctrine\ORM\NativeQuery */
         $nq = $this->em->createNativeQuery('UPDATE nacs SET Remain = Timer - now(), '.
             'Timer = null, IP = null WHERE Act = :1 AND IP = :2 AND Timer IS NOT NULL', $rsm);
-        
+
         $nq
             ->setParameter(1, $this->getUser()->getUsername())
             ->setParameter(2, $ip)
             ->execute()
         ;
-        
+
         return $this->inetTimer();
     }
 }
