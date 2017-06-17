@@ -1,3 +1,14 @@
+stsbl-iserv3-internet (17.06.17-0) experimental; urgency=medium
+
+  * NacManager.php: Fixed wrong line endings.; 
+  * Updated l10n.
+  * Removed superfluous spaces.
+  * Removed superfluous functions from Twig extension.
+  * Renamed package from "Internet" to "Internetfreigabe".
+  * Fixed phpdoc.
+
+ -- Stadtteilschule Blankenese <repository@stsbl.de>  Sat, 17 Jun 2017 22:26:43 +0200
+
 stsbl-iserv3-internet (17.05.12-0) experimental; urgency=medium
 
   [ Felix Jacobi ]
