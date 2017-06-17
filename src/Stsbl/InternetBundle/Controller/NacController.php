@@ -43,7 +43,7 @@ use Symfony\Component\HttpFoundation\Request;
 class NacController extends CrudController
 {
     /**
-     * @Template
+     * {@inheritdoc}
      */
     public function indexAction(Request $request)
     {
