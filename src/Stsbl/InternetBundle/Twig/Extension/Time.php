@@ -3,6 +3,10 @@
 namespace Stsbl\InternetBundle\Twig\Extension;
 
 use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
+use IServ\CoreBundle\Util\Format;
+use \Twig_Environment;
+use \Twig_Extension;
+use \Twig_SimpleFilter;
 
 /*
  * The MIT License
@@ -34,14 +38,14 @@ use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class Time extends \Twig_Extension
+class Time extends Twig_Extension
 {
     private $connectionFactory;
 
     /**
      * The constructor
      * 
-     * @param ConnectionFactory
+     * @param ConnectionFactory $connectionFactory
      */
     public function __construct(ConnectionFactory $connectionFactory)
     {
@@ -54,8 +58,8 @@ class Time extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'linterval' => new \Twig_SimpleFilter('linterval', [$this, 'intervalToString']),
-            'smart_date' => new \Twig_SimpleFilter('smart_date', [$this, 'smartDate']),
+            'linterval' => new Twig_SimpleFilter('linterval', [$this, 'intervalToString']),
+            'smart_date' => new Twig_SimpleFilter('smart_date', [$this, 'smartDate']),
         ];
     }
 
@@ -77,8 +81,8 @@ class Time extends \Twig_Extension
     {
         // parse interval via database connection
         // FIXME This is very UGLY!
-        $db = $this->connectionFactory->createConnection(['pdo' => new \PDO('pgsql:dbname=iserv', 'webusr')]);
-        $statement = $db->prepare('SELECT EXTRACT(EPOCH FROM :1::interval)');
+        $db = $this->connectionFactory->createConnection(['pdo' => new \PDO('pgsql:dbname=iserv', 'symfony')]);
+        $statement = $db->prepare('SELECT EXTRACT(EPOCH FROM ?::interval)');
         $statement->execute([$interval]);
         $seconds = (float)$statement->fetch()['date_part'];
         $db->close();
@@ -100,61 +104,15 @@ class Time extends \Twig_Extension
     /**
      * Example: 8:30 AM; So, 11:15 PM; Dec 24th; Jan 1st, 05
      * 
-     * @param \DateTime $dateTime
-     * @return $date
-     */
-    public function smartDate(\DateTime $dateTime)
-    {
-        $date = $dateTime->getTimestamp();
-
-        if (date("Ymd") == date("Ymd", $date)) {
-            return $this->translateDate("%#I:%M %p", $date);
-        }
-        if (date("YW") == date("YW", $date)) {
-            return $this->translateDate("%a, %#I:%M %p", $date);
-        }
-        if (date("Y") == date("Y", $date)) {
-            return $this->translateDate("%b %#d#", $date);
-        }
-
-        return $this->translateDate("%b %#d#, %y", $date);
-    }
-
-    /** 
-     * format $ts according to locale settings
-     *
-     * see strftime() for specifiers
-     *  %#x - suppress leading zeroes
-     * %x# - append ordinal suffix (i. e. 1th, 2nd, 3rd...)
-     * 
-     * @param string $str
-     * @param bool $ts
+     * @param \DateTime|string|int $datetime
+     * @deprecated
      * @return string
      */
-    private function translateDate($str, $ts = false)
+    public function smartDate($datetime)
     {
-        $str = _($str);
-        while (preg_match("/(.*)%#(\w)(.*)/", $str, $m)) {
-            $str = $m[1].(int)strftime("%$m[2]", $ts).$m[3];
-        }
-        $str = strftime($str, $ts);
+        @trigger_error(sprintf('The direct usage of %s in %s is deprecated and will removed in future versions. ' .
+            'Use the function from %s instead.', __FUNCTION__, self::class, Format::class));
 
-        while (preg_match("/(.*?)(\d+)#(.*)/", $str, $m)) {
-            $str = $m[1]._($this->appendOrdSuffix($m[2])).$m[3];
-        }
-        return $str;
-    }
-
-    /**
-     * ..., 1 => st, 2 => nd, 3 => rd, 4 => th, ..., 21 => st, ...
-     * 
-     * @param integer $i
-     * @return string
-     */
-    private function appendOrdSuffix($i)
-    {
-        $o = $i%10;    # last digit
-        $t = $i/10%10; # second last digit
-        return $i.($t!=1 && $o>0 && $o<4? $o!=1? $o!=2? "rd": "nd": "st": "th");
+        return Format::smartDate($datetime);
     }
 }
