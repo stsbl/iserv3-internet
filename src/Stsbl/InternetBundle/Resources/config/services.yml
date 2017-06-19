@@ -37,3 +37,9 @@ services:
         tags:
           - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu } # Tells IServ about the main menu method
           #- { name: kernel.event_listener, event: iserv_portal.menu_admin, method: onBuildAdminMenu } # Tells IServ about the admin menu method
+
+    stsbl.scmc.validator.nac:
+        class: Stsbl\SchoolCertificateManagerConnectorBundle\Validator\Constraints\NotPortalServerDomainValidator
+        arguments: ["@iserv.config"]
+        tags:
+            - { name: validator.constraint_validator, alias: stsbl_scmc_not_portalserver_domain_validator }
