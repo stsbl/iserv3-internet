@@ -7,7 +7,7 @@ Standards-Version: 3.9.5
 
 Package: stsbl-iserv3-internet
 Architecture: all
-Depends: iserv-internet
+Depends: iserv-internet, iserv3-host
 Description: IServ 3: Internetfreigabe
  Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs in IServ 3.
 Tag: suite::iserv:portal, role::plugin
