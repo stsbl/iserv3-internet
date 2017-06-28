@@ -47,7 +47,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Service for NAC handling
  *
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
- * @license MIT license <https://opensource.org/licneses/MIT>
+ * @license MIT license <https://opensource.org/licenses/MIT>
  */
 class NacManager 
 {
