@@ -1,3 +1,17 @@
+stsbl-iserv3-internet (17.06.28-0) experimental; urgency=medium
+
+  [ Felix Jacobi ]
+  * Updated install file.
+  * Updatged build rules.
+  * Udpated build deps.
+  * services.yml: Added missing service definition.
+  * Revert "services.yml: Added missing service definition."
+  * Removed standalone sql code (now provided by iserv3-host).
+  * Fixed typo.
+  * Added dependency on iserv3-host.
+
+ -- Stadtteilschule Blankenese <repository@stsbl.de>  Wed, 28 Jun 2017 15:38:38 +0200
+
 stsbl-iserv3-internet (17.06.17-0) experimental; urgency=medium
 
   * NacManager.php: Fixed wrong line endings.; 
