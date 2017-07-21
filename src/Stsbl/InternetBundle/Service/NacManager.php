@@ -88,19 +88,20 @@ class NacManager
 
     /**
      * The constructor
-     * 
+     *
      * @param SecurityHandler $securityHandler
      * @param RequestStack $requestStack
      * @param Shell $shell
      * @param Doctrine $doctrine
+     * @param Logger $logger
      */
-    public function __construct(SecurityHandler $securityHandler, RequestStack $requestStack, Shell $shell, Doctrine $doctine, Logger $logger) 
+    public function __construct(SecurityHandler $securityHandler, RequestStack $requestStack, Shell $shell, Doctrine $doctrine, Logger $logger)
     {
-        $this->em = $doctine->getManager();
+        $this->em = $doctrine->getManager();
         $this->securityHandler = $securityHandler;
         $this->request = $requestStack->getCurrentRequest();
         $this->shell = $shell;
-        $this->connection = $doctine->getConnection();
+        $this->connection = $doctrine->getConnection();
         $this->logger = $logger;
     }
 
@@ -175,12 +176,19 @@ class NacManager
     /**
      * Get internet information (overrideUntil and overrideBy).
      * 
-     * @return \IServ\HostBundle\Entity\Host
+     * @return array
      */
     public function getInternetInformation()
     {
-        /* @var $host \IServ\HostBundle\Entity\Host */
-        $host = $this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp());
+        try {
+            /* @var $host \IServ\HostBundle\Entity\Host */
+            $host = $this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp());
+        } catch (NoResultException $e) {
+            return [
+                'until' => null,
+                'by' => null,
+            ];
+        }
 
         if ($host === null) {
             return [
@@ -196,7 +204,7 @@ class NacManager
     }
 
     /**
-     * Check if internet access is explicity denied for the current client.
+     * Check if internet access is explicitly denied for the current client.
      * 
      * @return boolean 
      */
@@ -297,7 +305,7 @@ class NacManager
                 break;
 
             case 'group':
-                // Create PAC for all users of a group
+                // Create NAC for all users of a group
                 /* @var $group \IServ\CoreBundle\Entity\Group */
                 $group = $addForm['group']->getData();
                 foreach ($group->getUsers() as $user) {
@@ -354,7 +362,7 @@ class NacManager
      * UniqueConstraintViolationException and retry the
      * insert with another random chosen NAC.
      *
-     * @param Nac $pac
+     * @param Nac $nac
      * @throws \Exception
      */
     public function insertNac(Nac $nac)
@@ -380,7 +388,7 @@ class NacManager
                 return;
             }
             catch (UniqueConstraintViolationException $e) {
-                // (retry with new PAC)
+                // (retry with new NAC)
             }
         }
 
