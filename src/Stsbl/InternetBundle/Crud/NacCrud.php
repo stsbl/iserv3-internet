@@ -5,6 +5,7 @@ namespace Stsbl\InternetBundle\Crud;
 use IServ\CoreBundle\Entity\Specification\PropertyMatchSpecification;
 use IServ\CoreBundle\Service\Config;
 use IServ\CoreBundle\Service\Logger;
+use IServ\CoreBundle\Traits\LoggerTrait;
 use IServ\CrudBundle\Crud\AbstractCrud;
 use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\CrudBundle\Mapper\ListMapper;
@@ -44,12 +45,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class NacCrud extends AbstractCrud
 {
-
-    /**
-     * @var \IServ\CoreBundle\Service\Logger
-     */
-    private $logger;
-
+    use LoggerTrait;
     /**
      * @var Time
      */
@@ -76,6 +72,8 @@ class NacCrud extends AbstractCrud
         $this->routesNamePrefix = 'internet_manage_';
         //$this->options['help'] = 'v3/modules/network/print/';
         $this->templates['crud_index'] = 'StsblInternetBundle:Nac:index.html.twig';
+
+        $this->logModule = 'Internet';
     }
 
     /**
@@ -110,8 +108,7 @@ class NacCrud extends AbstractCrud
         else {
             $msg = sprintf('NAC "%s" mit %s verbleibender Zeit erstellt von "%s" und vergeben an "%s" gelöscht', $nac->getId(), $value, $nac->getOwner()->getName(), $nac->getUser()->getName());
         }
-        $this->logger->write($msg, null, 'Internet');
-
+        $this->log($msg);
         // run inet_timer to disable deleted NACs
         $this->manager->inetTimer();
     }
@@ -141,21 +138,25 @@ class NacCrud extends AbstractCrud
 
     /*** SETTERS ***/
 
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
-    }
-
+    /**
+     * @param Time $time
+     */
     public function setTwigTimeExtension(Time $time)
     {
         $this->time = $time;
     }
 
+    /**
+     * @param NacManager $manager
+     */
     public function setManager(NacManager $manager)
     {
         $this->manager = $manager;
     }
 
+    /**
+     * @param Config $config
+     */
     public function setConfig(Config $config)
     {
         $this->config = $config;
