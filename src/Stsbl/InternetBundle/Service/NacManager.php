@@ -349,7 +349,7 @@ class NacManager
 
         // Log
         $value = $nacTpl->getNac();
-        $msg = sprintf('%d %s mit "%s" hinzugefügt', $count, $count === 1 ? 'NAC' : 'NACs', $value);
+        $msg = sprintf('%d %s mit %s Minuten hinzugefügt', $count, $count === 1 ? 'NAC' : 'NACs', $value);
         $this->logger->write($msg, null, 'Internet');
 
         return $count;
