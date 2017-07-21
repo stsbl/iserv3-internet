@@ -1,3 +1,11 @@
+stsbl-iserv3-internet (17.07.21-0) experimental; urgency=medium
+
+  [ Felix Jacobi ]
+  * Fixed typos in NacManager.
+  * Fixed l10n.
+
+ -- Stadtteilschule Blankenese <repository@stsbl.de>  Fri, 21 Jul 2017 12:06:27 +0200
+
 stsbl-iserv3-internet (17.06.28-0) experimental; urgency=medium
 
   [ Felix Jacobi ]
