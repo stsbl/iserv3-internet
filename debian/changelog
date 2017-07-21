@@ -1,3 +1,12 @@
+stsbl-iserv3-internet (17.07.21-1) experimental; urgency=medium
+
+  [ Felix Jacobi ]
+  * Fixed too long extended description.
+  * Use logger trait.
+  * Fixed logging.
+
+ -- Stadtteilschule Blankenese <repository@stsbl.de>  Fri, 21 Jul 2017 16:45:57 +0200
+
 stsbl-iserv3-internet (17.07.21-0) experimental; urgency=medium
 
   [ Felix Jacobi ]
