@@ -166,7 +166,7 @@ class NacManager
             return $this->em->getRepository('IServHostBundle:Host')->findOneBy(['internet' => true, 'overrideRoute' => null, 'ip' => $this->request->getClientIp()]) != null;
         } catch (NoResultException $e) {
             try {
-                $this->em->getRepository('IServHostBundle:Host')->findOneBy(['overrideRoute' => true, 'ip' => $this->request->getClientIp()]) != null;
+                return $this->em->getRepository('IServHostBundle:Host')->findOneBy(['overrideRoute' => true, 'ip' => $this->request->getClientIp()]) != null;
             } catch (NoResultException $e) {
                 return false;
             }
@@ -280,7 +280,7 @@ class NacManager
         switch ($addForm['assignment']->getData()) {
 
             case 'free_usage':
-                // Create one or more unassigned PACs
+                // Create one or more unassigned NACs
                 $count = $addForm['count']->getData();
                 for ($i = 0; $i < $count; $i++) {
                     $this->insertNac(clone($nacTpl));
