@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stsbl-iserv3-internet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-07 20:16+0200\n"
+"POT-Creation-Date: 2017-07-21 11:46+0200\n"
 "PO-Revision-Date: 2017-05-07 14:52+0200\n"
 "Last-Translator: root <repository@stsbl.de>\n"
 "Language-Team: German\n"
@@ -91,6 +91,15 @@ msgstr "Internet ist freigeschaltet"
 msgid "Remaining time: %s"
 msgstr "Verbleibende Zeit: %s"
 
+#: src/Stsbl/InternetBundle/Service/NacManager.php:297
+#: src/Stsbl/InternetBundle/Service/NacManager.php:315
+#: src/Stsbl/InternetBundle/Service/NacManager.php:332
+#, php-format
+msgid "Not created a NAC for %s, because User %s has already a NAC."
+msgstr ""
+"Es wurde kein NAC für %s erstellt, da Benutzer %s bereits ein NAC "
+"besitzt."
+
 #: src/Stsbl/InternetBundle/Form/Type/NacCreateType.php:35
 msgid "Duration"
 msgstr "Dauer"
@@ -150,8 +159,8 @@ msgstr "Erstellen"
 #: src/Stsbl/InternetBundle/Controller/NacController.php:64
 msgid "The NAC has been created."
 msgid_plural "The NACs have been created."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Der NAC wurde erstellt."
+msgstr[1] "Die NACs wurden erstellt."
 
 #: src/Stsbl/InternetBundle/Controller/DefaultController.php:82
 #: src/Stsbl/InternetBundle/Crud/NacCrud.php:125
@@ -194,28 +203,18 @@ msgstr "Erstellt von"
 msgid "Created on"
 msgstr "Erstellt am"
 
-#: src/Stsbl/InternetBundle/Crud/NacCrud.php:128
-msgid "Expires on"
-msgstr "Läuft ab am"
-
-#: src/Stsbl/InternetBundle/Crud/NacCrud.php:131
+#: src/Stsbl/InternetBundle/Crud/NacCrud.php:130
 msgid "Remaining"
 msgstr "Verbleibend"
 
-#: src/Stsbl/InternetBundle/Crud/NacCrud.php:134
+#: src/Stsbl/InternetBundle/Crud/NacCrud.php:133
 msgid "Assigned to"
 msgstr "Vergeben an"
 
-#: src/Stsbl/InternetBundle/Crud/NacCrud.php:135
+#: src/Stsbl/InternetBundle/Crud/NacCrud.php:134
 msgid "Assigned on"
 msgstr "Vergeben am"
 
-#: src/Stsbl/InternetBundle/Crud/NacCrud.php:138
+#: src/Stsbl/InternetBundle/Crud/NacCrud.php:137
 msgid "Status"
 msgstr "Status"
-
-#~ msgid "Invalid NAC!"
-#~ msgstr "Ungültiger NAC!"
-
-#~ msgid "You are not owning this NAC!"
-#~ msgstr "Sie besitzen diesen NAC nicht!"
