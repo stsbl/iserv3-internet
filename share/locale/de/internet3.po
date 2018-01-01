@@ -1,14 +1,14 @@
 # TRANSLATION CATALOG OF STSBL-ISERV3-INTERNET.
-# Copyright (C) 2017 Stadtteilschule Blankenese
+# Copyright (C) 2018 Stadtteilschule Blankenese
 # This file is distributed under the same license as the stsbl-iserv3-internet package.
-# Stadtteilschule Blankenese <repository@stsbl.de>, 2017.
+# Stadtteilschule Blankenese <repository@stsbl.de>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: stsbl-iserv3-internet\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-21 11:46+0200\n"
-"PO-Revision-Date: 2017-05-07 14:52+0200\n"
+"POT-Creation-Date: 2018-07-21 11:46+0200\n"
+"PO-Revision-Date: 2018-05-07 14:52+0200\n"
 "Last-Translator: root <repository@stsbl.de>\n"
 "Language-Team: German\n"
 "Language: de\n"
