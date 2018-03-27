@@ -3,11 +3,16 @@ Section: misc
 Priority: extra
 Maintainer: Stadtteilschule Blankenese <repository@stsbl.de>
 Build-Depends: debhelper (>= 10), iserv3-dev
-Standards-Version: 3.9.5
+Build-Depends-Indep: iserv3-dev
+Standards-Version: 4.1.3.0
 
 Package: stsbl-iserv3-internet
 Architecture: all
-Depends: iserv-internet, iserv3-host
+Depends: ${misc:Depends},
+  ${perl:Depens},
+  iserv-internet,
+  iserv3-host,
+Xb-Private-IServ-Revision: ${iserv:Revision}
 Description: IServ 3: Internetfreigabe
  Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs
  in IServ 3.
