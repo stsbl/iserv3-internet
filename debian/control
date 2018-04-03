@@ -9,7 +9,7 @@ Standards-Version: 4.1.3
 Package: stsbl-iserv3-internet
 Architecture: all
 Depends: ${misc:Depends},
-  ${perl:Depens},
+  ${perl:Depends},
   iserv-internet,
   iserv3-host,
 Xb-Private-IServ-Revision: ${iserv:Revision}
