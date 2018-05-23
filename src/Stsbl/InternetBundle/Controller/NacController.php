@@ -1,7 +1,9 @@
 <?php
 namespace Stsbl\InternetBundle\Controller;
 
+use IServ\CoreBundle\Service\Config;
 use IServ\CrudBundle\Controller\CrudController;
+use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Form\Data\CreateNacs;
 use Stsbl\InternetBundle\Form\Type\NacCreateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -88,22 +90,25 @@ class NacController extends CrudController
      * @Route("/internet/manage/nacs/print", name="internet_manage_nacs_print")
      * @Security("is_granted('PRIV_INET_NACS')")
      * @Template()
+     *
+     * @param Config $config
+     * @return array
      */
-    public function printAction()
+    public function printAction(Config $config)
     {
-        if (!$this->get('iserv.config')->get('Activation')) {
+        if (!$config->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
         }
 
-        $nacs = $this->getDoctrine()->getRepository('StsblInternetBundle:Nac')->findBy(array(
+        $nacs = $this->getDoctrine()->getRepository(Nac::class)->findBy(array(
             'user' => null,
             'owner' => $this->getUser(),
         ));
 
-        return array(
+        return [
             'nacs' => $nacs,
             'currentUser' => $this->getUser(),
-        );
+        ];
     }
 
     /**
