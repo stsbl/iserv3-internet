@@ -11,24 +11,17 @@ services:
         IServ\CoreBundle\EventListener\MainMenuListenerInterface:
             tags:
               - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu }
-  
+
+    Stsbl\InternetBundle\:
+        resource: '../../'
+        exclude: '../../{DependencyInjection,Form/Data,Security}'
+
     Stsbl\InternetBundle\Crud\NacCrud:
         arguments: [Stsbl\InternetBundle\Entity\Nac]
         calls:
             - [setLogger, ["@iserv.logger"]]
-            - [setObjectManager, ['@Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager']]
         tags:
             - { name: iserv.crud }
-
-    Stsbl\InternetBundle\Twig\Extension\Time: ~
-
-    Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager: ~
-
-    Stsbl\InternetBundle\Validator\Constraints\NacValidator: ~
-
-    Stsbl\InternetBundle\EventListener\MenuListener: ~
-
-    Stsbl\InternetBundle\Service\NacManager: ~
 
     Stsbl\InternetBundle\Controller\:
         resource: '../../Controller'
