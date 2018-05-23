@@ -2,10 +2,12 @@
 namespace Stsbl\InternetBundle\Controller;
 
 use IServ\CrudBundle\Controller\CrudController;
+use Stsbl\InternetBundle\Form\Data\CreateNacs;
 use Stsbl\InternetBundle\Form\Type\NacCreateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Stsbl\InternetBundle\Service\NacManager;
 use Symfony\Component\HttpFoundation\Request;
 
 /*
@@ -43,19 +45,25 @@ use Symfony\Component\HttpFoundation\Request;
 class NacController extends CrudController
 {
     /**
+     * @var NacManager
+     */
+    private $nacManager;
+
+    /**
      * {@inheritdoc}
      */
     public function indexAction(Request $request)
     {
+        $data = new CreateNacs();
+        $data->setCreator($this->getUser());
+
         // NAC add form
-        $addForm = $this->createForm(NacCreateType::class, null, ['default_credits' => 45]);
+        $addForm = $this->createForm(NacCreateType::class, $data, ['default_credits' => 45]);
         $addForm->handleRequest($request);
         if ($addForm->isSubmitted() && $addForm->isValid()) {
-            /* @var $nacManager \Stsbl\InternetBundle\Service\NacManager */
-            $nacManager = $this->get('stsbl.internet.nac_manager');
-            $created = $nacManager->createNacsByForm($addForm, $this->getUser());
+            $created = $this->nacManager->createNacs($addForm->getData());
+            $warnings = $this->nacManager->getNacWarnings();
 
-            $warnings = $nacManager->getNacWarnings();
             if (count($warnings) > 0) {
                 $this->get('iserv.flash')->alert(join("\n", $warnings));
             }
@@ -96,6 +104,15 @@ class NacController extends CrudController
             'nacs' => $nacs,
             'currentUser' => $this->getUser(),
         );
+    }
+
+    /**
+     * @param NacManager $nacManager
+     * @required
+     */
+    public function setNacManager(NacManager $nacManager)
+    {
+        $this->nacManager = $nacManager;
     }
 
 }

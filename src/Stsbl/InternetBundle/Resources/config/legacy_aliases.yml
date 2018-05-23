@@ -1,0 +1,8 @@
+# src/Stsbl/InternetBundle/Resources/config/legacy_aliases.yml
+services:
+    _defaults:
+        autoconfigure: false
+        autoconfigure: false
+        public: true
+
+    stsbl.internet.nac_manager: '@Stsbl\InternetBundle\Service\NacManager'

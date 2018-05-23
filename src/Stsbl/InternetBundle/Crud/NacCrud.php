@@ -140,6 +140,7 @@ class NacCrud extends AbstractCrud
 
     /**
      * @param Time $time
+     * @required
      */
     public function setTwigTimeExtension(Time $time)
     {
@@ -148,6 +149,7 @@ class NacCrud extends AbstractCrud
 
     /**
      * @param NacManager $manager
+     * @required
      */
     public function setManager(NacManager $manager)
     {
@@ -156,6 +158,7 @@ class NacCrud extends AbstractCrud
 
     /**
      * @param Config $config
+     * @required
      */
     public function setConfig(Config $config)
     {

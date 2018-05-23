@@ -75,7 +75,6 @@ class Nac implements CrudInterface
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @ORM\Id
      * @Assert\NotBlank()
      *
      * @var string

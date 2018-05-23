@@ -9,11 +9,15 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\ResultSetMapping;
 use IServ\CoreBundle\Entity\User;
+use IServ\CoreBundle\Exception\ShellExecException;
 use IServ\CoreBundle\Security\Core\SecurityHandler;
 use IServ\CoreBundle\Service\Logger;
 use IServ\CoreBundle\Service\Shell;
 use IServ\CrudBundle\Entity\FlashMessageBag;
+use IServ\HostBundle\Entity\Host;
 use Stsbl\InternetBundle\Entity\Nac;
+use Stsbl\InternetBundle\Form\Data\CreateNacs;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -92,10 +96,10 @@ class NacManager
      * @param SecurityHandler $securityHandler
      * @param RequestStack $requestStack
      * @param Shell $shell
-     * @param Doctrine $doctrine
+     * @param RegistryInterface $doctrine
      * @param Logger $logger
      */
-    public function __construct(SecurityHandler $securityHandler, RequestStack $requestStack, Shell $shell, Doctrine $doctrine, Logger $logger)
+    public function __construct(SecurityHandler $securityHandler, RequestStack $requestStack, Shell $shell, RegistryInterface $doctrine, Logger $logger)
     {
         $this->em = $doctrine->getManager();
         $this->securityHandler = $securityHandler;
@@ -114,8 +118,8 @@ class NacManager
      */
     public function hasNac(UserInterface $user = null)
     {
-        /* @var $nacRepository \Stsbl\InternetBundle\Entity\NacRepository */
-        $nacRepository = $this->em->getRepository('StsblInternetBundle:Nac');
+        $nacRepository = $this->em->getRepository(Nac::class);
+
         return $nacRepository->hasNac($this->getUser($user));
     }
 
@@ -130,8 +134,8 @@ class NacManager
      */
     public function getUserNac(UserInterface $user = null)
     {
-        /* @var $nacRepository \Stsbl\InternetBundle\Entity\NacRepository */
-        $nacRepository = $this->em->getRepository('StsblInternetBundle:Nac');
+        $nacRepository = $this->em->getRepository(Nac::class);
+
         return $nacRepository->findNacByUser($this->getUser($user));
     }
 
@@ -162,15 +166,13 @@ class NacManager
             return false;
         }
 
-        try {
-            return $this->em->getRepository('IServHostBundle:Host')->findOneBy(['internet' => true, 'overrideRoute' => null, 'ip' => $this->request->getClientIp()]) != null;
-        } catch (NoResultException $e) {
-            try {
-                return $this->em->getRepository('IServHostBundle:Host')->findOneBy(['overrideRoute' => true, 'ip' => $this->request->getClientIp()]) != null;
-            } catch (NoResultException $e) {
-                return false;
-            }
+        $host = $this->em->getRepository(Host::class)->findOneBy(['internet' => true, 'overrideRoute' => null, 'ip' => $this->request->getClientIp()]);
+
+        if (null !== $host) {
+            return true;
         }
+
+        return $this->em->getRepository(Host::class)->findOneBy(['overrideRoute' => true, 'ip' => $this->request->getClientIp()]) !== null;
     }
 
     /**
@@ -180,17 +182,10 @@ class NacManager
      */
     public function getInternetInformation()
     {
-        try {
-            /* @var $host \IServ\HostBundle\Entity\Host */
-            $host = $this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp());
-        } catch (NoResultException $e) {
-            return [
-                'until' => null,
-                'by' => null,
-            ];
-        }
+        /** @var Host $host */
+        $host = $this->em->getRepository(Host::class)->findOneByIp($this->request->getClientIp());
 
-        if ($host === null) {
+        if (null === $host) {
             return [
                 'until' => null,
                 'by' => null,
@@ -199,7 +194,7 @@ class NacManager
 
         return [
             'until' => $host->getOverrideUntil(),
-            'by' => $this->em->getRepository('IServCoreBundle:User')->findOneByUsername($host->getOverrideBy()),
+            'by' => $this->em->getRepository(User::class)->findOneByUsername($host->getOverrideBy()),
         ];
     }
 
@@ -248,7 +243,11 @@ class NacManager
      */
     private function shellMsgError($cmd, $args = null, $stdin = null, $env = null)
     {
-        $this->shell->exec($cmd, $args, $stdin, $env);
+        try {
+            $this->shell->exec($cmd, $args, $stdin, $env);
+        } catch (ShellExecException $e) {
+            return (new FlashMessageBag())->addMessage('error', $e->getMessage());
+        }
 
         $messages = new FlashMessageBag();
         foreach ($this->shell->getError() as $e) {
@@ -261,27 +260,26 @@ class NacManager
     /**
      * Create bunch of NACs using NAC management form
      *
-     * @param Form $addForm
-     * @param User $creator
+     * @param CreateNacs $createNacs
      * @return integer
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function createNacsByForm(Form $addForm, User $creator)
+    public function createNacs(CreateNacs $createNacs)
     {
         $this->nacWarnings = [];
 
         // NAC template - new NACs are cloned from this object
         $nacTpl = new Nac();
-        $nacTpl->setNac($addForm['value']->getData());
-        $nacTpl->setRemain((integer)$addForm['value']->getData() * 60);
-        $nacTpl->setOwner($creator);
+        $nacTpl->setRemain($createNacs->getDuration() * 60);
+        $nacTpl->setOwner($createNacs->getCreator());
 
         $count = 0;
 
-        switch ($addForm['assignment']->getData()) {
+        switch ($createNacs->getAssignment()) {
 
             case 'free_usage':
                 // Create one or more unassigned NACs
-                $count = $addForm['count']->getData();
+                $count = $createNacs->getCount();
                 for ($i = 0; $i < $count; $i++) {
                     $this->insertNac(clone($nacTpl));
                 }
@@ -291,7 +289,7 @@ class NacManager
             case 'user':
                 // Create PAC for a single user
                 $nac = clone($nacTpl);
-                $user = $addForm['user']->getData();
+                $user = $createNacs->getUser();
                 // User can only have one NAC at the same time
                 if ($this->hasNac($user)) {
                     $this->nacWarnings[] = __('Not created a NAC for %s, because User %s has already a NAC.', (string)$user, (string)$user);
@@ -307,7 +305,7 @@ class NacManager
             case 'group':
                 // Create NAC for all users of a group
                 /* @var $group \IServ\CoreBundle\Entity\Group */
-                $group = $addForm['group']->getData();
+                $group = $createNacs->getGroup();
                 foreach ($group->getUsers() as $user) {
                     $nac = clone($nacTpl);
                     // User can only have one NAC at the same time
@@ -356,6 +354,8 @@ class NacManager
     }
 
     /**
+     * @noinspection PhpDocMissingThrowsInspection
+     *
      * Store a new NAC in database
      *
      * Not using the entity manager here to be able to catch
@@ -363,21 +363,21 @@ class NacManager
      * insert with another random chosen NAC.
      *
      * @param Nac $nac
-     * @throws \Exception
      */
     public function insertNac(Nac $nac)
     {
-        $expire = date('c', time() + 60 * 60 * 24 * 30);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $expire = (new \DateTime('now'))->add(new \DateInterval('P1M'));
 
-        $nacData = array(
+        $nacData = [
             'act' => $nac->getUser() === null ? null : $nac->getUser()->getUsername(),
             'owner' => $nac->getOwner() === null ? null : $nac->getOwner()->getUsername(),
             'remain' => $nac->getRemain(),
             'nac' => $nac->getNac(),
             'created' => $nac->getCreated()->format('c'),
-            'expire' => $expire, // expire after one month
-            'assigned' => $nac->getAssigned() === null ? null : $nac->getAssigned()->getUsername(),
-        );
+            'expire' => $expire->format('c'), // expire after one month
+            'assigned' => $nac->getAssigned(),
+        ];
 
         // Maximum number of tries
         for ($i = 0; $i < 10000; $i++) {
@@ -387,11 +387,13 @@ class NacManager
 
                 return;
             }
+            /** @noinspection PhpRedundantCatchClauseInspection */
             catch (UniqueConstraintViolationException $e) {
                 // (retry with new NAC)
             }
         }
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         throw new \Exception("Unable to create NAC (no NACs left)");
     }
 
@@ -416,6 +418,8 @@ class NacManager
     }
 
     /**
+     * @noinspection PhpDocMissingThrowsInspection
+     *
      * Unlock access to Internet with NAC.
      * If no NAC supplied, the auto detection of current NAC will tried.
      * 
@@ -424,9 +428,9 @@ class NacManager
      */
     public function grantInternet($nac = null)
     {
-        if ($nac != null && !$this->hasNac()) {
+        if ($nac !== null && !$this->hasNac()) {
             /* @var $nacData \Stsbl\InternetBundle\Entity\Nac */
-            $nacData = $this->getDoctrine()->getRepository('StsblInternetBundle:Nac')->findOneByNac($nac);  
+            $nacData = $this->em->getRepository(Nac::class)->findOneByNac($nac);
         } else {
             $nacData = $this->getUserNac();
             $nac = $nacData->getNac();
@@ -435,6 +439,7 @@ class NacManager
         if ($nacData->getAssigned() === null) {
             $nacData->setAssigned(new \DateTime('now'));
             $this->em->persist($nacData);
+            /** @noinspection PhpUnhandledExceptionInspection */
             $this->em->flush();
         }
 

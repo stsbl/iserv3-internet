@@ -1,39 +1,36 @@
+# src/Stsbl/InternetBundle/Resources/config/services.yml
 services:
-    stsbl.internet.nac_manager:
-        class: Stsbl\InternetBundle\Service\NacManager
-        arguments: ["@iserv.security_handler", "@request_stack", "@iserv.shell", "@doctrine", "@iserv.logger"]
+    _defaults:
+        autoconfigure: true
+        autowire: true
+        public: false
+        bind:
+            $connectionFactory: '@doctrine.dbal.connection_factory'
 
-    stsbl.internet.twig.extension.time:
-        class: Stsbl\InternetBundle\Twig\Extension\Time
-        arguments: ["@doctrine.dbal.connection_factory"]
-        tags :
-          - { name: twig.extension }
+    _instanceof:
+        IServ\CoreBundle\EventListener\MainMenuListenerInterface:
+            tags:
+              - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu }
   
-    stsbl.internet.print.nac:
-        class: Stsbl\InternetBundle\Crud\NacCrud
+    Stsbl\InternetBundle\Crud\NacCrud:
         arguments: [Stsbl\InternetBundle\Entity\Nac]
         calls:
-            - [ setLogger, ["@iserv.logger"] ]
-            - [ setObjectManager, ["@stsbl.internet.nac_object_manager"] ]
-            - [ setTwigTimeExtension, ["@stsbl.internet.twig.extension.time"] ]
-            - [ setManager, ["@stsbl.internet.nac_manager"] ]
-            - [ setConfig, ["@iserv.config"] ]
+            - [setLogger, ["@iserv.logger"]]
+            - [setObjectManager, ['@Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager']]
         tags:
             - { name: iserv.crud }
 
-    stsbl.internet.nac_object_manager:
-        class: Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager
-        arguments: ["@doctrine"]
+    Stsbl\InternetBundle\Twig\Extension\Time: ~
 
-    stsbl.internet.validator.nac:
-        class: Stsbl\InternetBundle\Validator\Constraints\NacValidator
-        arguments: ["@doctrine.orm.entity_manager", "@iserv.security_handler"]
-        tags:
-            - { name: validator.constraint_validator, alias: stsbl_internet_nac_validator }
+    Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager: ~
 
-    stsbl.internet.menu:
-        class: Stsbl\InternetBundle\EventListener\MenuListener # Out MenuListener Class
-        arguments: ["@iserv.config"]
-        tags:
-          - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu } # Tells IServ about the main menu method
-          #- { name: kernel.event_listener, event: iserv_portal.menu_admin, method: onBuildAdminMenu } # Tells IServ about the admin menu method
+    Stsbl\InternetBundle\Validator\Constraints\NacValidator: ~
+
+    Stsbl\InternetBundle\EventListener\MenuListener: ~
+
+    Stsbl\InternetBundle\Service\NacManager: ~
+
+    Stsbl\InternetBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+

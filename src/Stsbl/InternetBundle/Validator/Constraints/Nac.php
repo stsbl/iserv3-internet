@@ -42,14 +42,6 @@ class Nac extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function validatedBy() 
-    {
-        return 'stsbl_internet_nac_validator';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTargets() 
     {
         return self::PROPERTY_CONSTRAINT;

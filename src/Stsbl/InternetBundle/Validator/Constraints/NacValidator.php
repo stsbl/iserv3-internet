@@ -2,10 +2,11 @@
 // src/Stsbl/InternetBundle/Validator/Constraints/NacValidator.php
 namespace Stsbl\InternetBundle\Validator\Constraints;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use IServ\CoreBundle\Security\Core\SecurityHandler;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /*
  * The MIT License
@@ -41,7 +42,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class NacValidator extends ConstraintValidator 
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $em;
 
@@ -52,11 +53,11 @@ class NacValidator extends ConstraintValidator
 
     /**
      * The constructor
-     * 
-     * @param EntityManager $em
+     *
+     * @param EntityManagerInterface $em
      * @param SecurityHandler $securityHandler
      */
-    public function __construct(EntityManager $em, SecurityHandler $securityHandler)
+    public function __construct(EntityManagerInterface $em, SecurityHandler $securityHandler)
     {
         $this->em = $em;
         $this->securityHandler = $securityHandler;
@@ -67,8 +68,12 @@ class NacValidator extends ConstraintValidator
      */
     public function validate($nac, Constraint $constraint)
     {
+        if (!$constraint instanceof Nac) {
+            throw new UnexpectedTypeException($constraint, Nac::class);
+        }
+
         /* @var $constraint Nac */
-        if (!preg_match('|[0-9]{8}|', $nac)) {
+        if (!preg_match('|^[0-9]{8}$|', $nac)) {
             $this->context->buildViolation($constraint->getWrongFormatMessage())->atPath('nac')->addViolation();
             return;
         }
@@ -81,7 +86,7 @@ class NacValidator extends ConstraintValidator
             return;
         }
 
-        if ($nacEntity->getUser() != $this->securityHandler->getUser() && $nacEntity->getUser() != null) {
+        if ($nacEntity->getUser() != $this->securityHandler->getUser() && $nacEntity->getUser() !== null) {
             $this->context->buildViolation($constraint->getWrongOwnerMessage())->atPath('nac')->addViolation();
         }
     }

@@ -4,6 +4,7 @@ namespace Stsbl\InternetBundle\Controller;
 
 use Doctrine\ORM\Query\ResultSetMapping;
 use IServ\CoreBundle\Controller\PageController;
+use IServ\CoreBundle\Service\Config;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Validator\Constraints\Nac;
@@ -105,15 +106,18 @@ class DefaultController extends PageController
 
         return $builder->getForm();
     }
+
     /**
-     * @param Request $request
-     * @return array
      * @Route("/internet", name="internet_index")
      * @Template()
+     *
+     * @param Config $config
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function indexAction(Request $request)
+    public function indexAction(Config $config, Request $request)
     {
-        if (!$this->get('iserv.config')->get('Activation')) {
+        if (!$config->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
         }
 
