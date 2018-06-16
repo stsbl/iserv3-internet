@@ -1,6 +1,6 @@
 stsbl-iserv3-internet (18.06.16-1) experimental; urgency=medium
 
-  * Fixed deprecation and removed superflous object manager
+  * Fixed deprecation and removed superfluous object manager
 
  -- Felix Jacobi <felix.jacobi@stsbl.de>  Sat, 16 Jun 2018 19:48:48 +0200
 
