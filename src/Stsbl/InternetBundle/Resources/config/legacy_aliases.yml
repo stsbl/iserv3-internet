@@ -2,7 +2,7 @@
 services:
     _defaults:
         autoconfigure: false
-        autoconfigure: false
+        autowire: false
         public: true
 
     stsbl.internet.nac_manager: '@Stsbl\InternetBundle\Service\NacManager'
