@@ -16,13 +16,10 @@ services:
         arguments: [Stsbl\InternetBundle\Entity\Nac]
         calls:
             - [setLogger, ["@iserv.logger"]]
-            - [setObjectManager, ['@Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager']]
         tags:
             - { name: iserv.crud }
 
     Stsbl\InternetBundle\Twig\Extension\Time: ~
-
-    Stsbl\InternetBundle\Doctrine\ORM\NacObjectManager: ~
 
     Stsbl\InternetBundle\Validator\Constraints\NacValidator: ~
 
