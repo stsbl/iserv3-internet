@@ -6,7 +6,7 @@ let baseConfig = require(path.join(process.env.WEBPACK_BASE_PATH, 'webpack.confi
 let webpackConfig = {
     entry: {
         'js/printnacs': './assets/js/printnacs.js',
-        'css/internet.css': './assets/less/internet.less',
+        'css/internet': './assets/less/internet.less',
     },
 };
 
