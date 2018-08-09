@@ -3,6 +3,7 @@ namespace Stsbl\InternetBundle\Controller;
 
 use IServ\CoreBundle\Service\Config;
 use IServ\CrudBundle\Controller\CrudController;
+use IServ\CrudBundle\Controller\StrictCrudController;
 use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Form\Data\CreateNacs;
 use Stsbl\InternetBundle\Form\Type\NacCreateType;
@@ -44,7 +45,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class NacController extends CrudController
+class NacController extends StrictCrudController
 {
     /**
      * @var NacManager

@@ -62,6 +62,14 @@ class NacCrud extends AbstractCrud
     private $config;
 
     /**
+     * The constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(Nac::class);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()

@@ -17,13 +17,12 @@ services:
         exclude: '../../{DependencyInjection,Form/Data,Security}'
 
     Stsbl\InternetBundle\Crud\NacCrud:
-        arguments: [Stsbl\InternetBundle\Entity\Nac]
         calls:
             - [setLogger, ["@iserv.logger"]]
-        tags:
-            - { name: iserv.crud }
 
     Stsbl\InternetBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+imports:
+    - { resource: legacy_aliases.yml }

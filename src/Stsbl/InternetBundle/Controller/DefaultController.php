@@ -3,10 +3,13 @@
 namespace Stsbl\InternetBundle\Controller;
 
 use Doctrine\ORM\Query\ResultSetMapping;
+use IServ\CoreBundle\Controller\AbstractPageController;
 use IServ\CoreBundle\Controller\PageController;
 use IServ\CoreBundle\Service\Config;
+use IServ\HostBundle\Service\Network;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Stsbl\InternetBundle\Service\NacManager;
 use Stsbl\InternetBundle\Validator\Constraints\Nac;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,7 +44,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class DefaultController extends PageController
+class DefaultController extends AbstractPageController
 {
     /**
      * Get NAC manager
@@ -148,5 +151,18 @@ class DefaultController extends PageController
             'form' => $form->createView(),
             'controller' => $this,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        $result = parent::getSubscribedServices();
+
+        $result['stsbl.internet.nac_manager'] = NacManager::class;
+        $result['iserv.host.network'] = Network::class;
+
+        return $result;
     }
 }
