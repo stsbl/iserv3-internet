@@ -2,10 +2,7 @@
 // src/Stsbl/InternetBundle/DependencyInjection/StsblInternetExtension.php
 namespace Stsbl\InternetBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
+use IServ\CoreBundle\DependencyInjection\IServBaseExtension;
 
 /*
  * The MIT License
@@ -39,26 +36,6 @@ use Symfony\Component\DependencyInjection\Loader;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class StsblInternetExtension extends Extension
+class StsblInternetExtension extends IServBaseExtension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
-    {
-        $configuration = new Configuration($this->getAlias());
-        $config = $this->processConfiguration($configuration, $configs);
-
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-        $loader->load('legacy_aliases.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias() 
-    {
-        return 'stsbl_internet';
-    }
 }

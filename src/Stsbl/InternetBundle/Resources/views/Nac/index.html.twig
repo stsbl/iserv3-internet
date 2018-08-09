@@ -31,10 +31,6 @@
         {% if app.environment != 'prod' %}
             <!-- {{ _self }} => printnacs.js -->
         {% endif %}
-        {% javascripts output='js/compiled/printnacs.js' filter='?uglifyjs2'
-        '@StsblInternetBundle/Resources/public/js/printnacs.js' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-
+        <script type="text/javascript" src="{{ asset('js/printnacs.js', 'stsbl-internet') }}"></script>
     {% endif %}
 {% endblock %}

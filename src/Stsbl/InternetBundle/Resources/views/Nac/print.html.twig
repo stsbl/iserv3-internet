@@ -12,7 +12,7 @@ p {
 <body onload="self.print();" style="font-size: 12pt;">
     {{ __('NACs created by: %s', currentUser.name) }}
     {% for nac in nacs %}
-        <p><b>{{ nac.nac }}:</b> {{ nac.remain|linterval }}</p>{# TODO: Currency formatter function? #}
+        <p><b>{{ nac.nac }}:</b> {{ nac.remain|linterval }}</p>
     {% endfor %}
 </body>
 </html>

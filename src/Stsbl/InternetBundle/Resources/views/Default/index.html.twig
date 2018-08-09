@@ -16,9 +16,7 @@
     {% if app.environment != 'prod' %}
         <!-- {{ _self }} => internet.css -->
     {% endif %}
-    {% stylesheets '@StsblInternetBundle/Resources/public/css/internet.less' filter='cssrewrite' filter='?uglifycss' output='css/compiled/internet.css' %}
-     <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %}
+     <link rel="stylesheet" href="{{ asset('css/internet.css'. 'stsbl-internet') }}">
 {% endblock %}
 
 {% block content %}
