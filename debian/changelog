@@ -1,3 +1,10 @@
+stsbl-iserv3-internet (18.09.12-1) experimental; urgency=medium
+
+  * Moved to webpack
+  * Updated build rules for webpack support
+
+ -- Felix Jacobi <felix.jacobi@stsbl.de>  Wed, 12 Sep 2018 01:12:20 +0200
+
 stsbl-iserv3-internet (18.06.16-1) experimental; urgency=medium
 
   * Fixed deprecation and removed superfluous object manager
