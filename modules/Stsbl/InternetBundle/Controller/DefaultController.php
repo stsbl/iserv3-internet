@@ -1,19 +1,17 @@
 <?php
-// src/Stsbl/InternetBundle/Controller/DefaultController.php
+
 namespace Stsbl\InternetBundle\Controller;
 
-use Doctrine\ORM\Query\ResultSetMapping;
 use IServ\CoreBundle\Controller\AbstractPageController;
-use IServ\CoreBundle\Controller\PageController;
 use IServ\CoreBundle\Service\Config;
 use IServ\HostBundle\Service\Network;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Service\NacManager;
 use Stsbl\InternetBundle\Validator\Constraints\Nac;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /*
@@ -46,29 +44,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class DefaultController extends AbstractPageController
 {
-    /**
-     * Get NAC manager
-     * 
-     * @return \Stsbl\InternetBundle\Service\NacManager
-     */
-    public function getNacManager()
+    public function getNacManager(): NacManager
     {
         return $this->get('stsbl.internet.nac_manager');
     }
 
-    /**
-     * Get Network service
-     * 
-     * @return \IServ\HostBundle\Service\Network
-     */
-    public function getNetworkService()
+    public function getNetworkService(): Network
     {
         return $this->get('iserv.host.network');
     }
 
     /**
      * Get NAC form
-     * 
+     *
      * @return \Symfony\Component\Form\Form
      */
     private function getNacForm()
@@ -136,7 +124,7 @@ class DefaultController extends AbstractPageController
             if ($form->has('grant') && $form->get('grant')->isClicked()) {
                 $this->getNacManager()->grantInternet($nac);
                 $this->get('iserv.flash')->success(_('Internet access with NAC successful granted.'));
-            } else if ($form->has('revoke') && $form->get('revoke')->isClicked()) {
+            } elseif ($form->has('revoke') && $form->get('revoke')->isClicked()) {
                 $this->getNacManager()->revokeInternet($request->getClientIp());
                 $this->get('iserv.flash')->success(_('Internet access with NAC successful revoked.'));
             }

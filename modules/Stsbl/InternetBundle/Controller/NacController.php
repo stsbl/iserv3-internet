@@ -1,17 +1,17 @@
 <?php
+
 namespace Stsbl\InternetBundle\Controller;
 
 use IServ\CoreBundle\Service\Config;
-use IServ\CrudBundle\Controller\CrudController;
 use IServ\CrudBundle\Controller\StrictCrudController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Form\Data\CreateNacs;
 use Stsbl\InternetBundle\Form\Type\NacCreateType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Service\NacManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /*
  * The MIT License
@@ -41,7 +41,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Customized CrudController for PAC listing.
  *
  * Adds add-form for NAC to index template and print action.
- * 
+ *
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
