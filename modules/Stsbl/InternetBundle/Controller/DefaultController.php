@@ -123,10 +123,10 @@ class DefaultController extends AbstractPageController
 
             if ($form->has('grant') && $form->get('grant')->isClicked()) {
                 $this->getNacManager()->grantInternet($nac);
-                $this->get('iserv.flash')->success(_('Internet access with NAC successful granted.'));
+                $this->addFlash('success', _('Internet access with NAC successful granted.'));
             } elseif ($form->has('revoke') && $form->get('revoke')->isClicked()) {
                 $this->getNacManager()->revokeInternet($request->getClientIp());
-                $this->get('iserv.flash')->success(_('Internet access with NAC successful revoked.'));
+                $this->addFlash('success', _('Internet access with NAC successful revoked.'));
             }
 
             return $this->redirect($this->generateUrl('internet_index'));

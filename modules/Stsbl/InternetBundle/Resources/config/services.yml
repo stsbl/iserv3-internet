@@ -7,22 +7,9 @@ services:
         bind:
             $connectionFactory: '@doctrine.dbal.connection_factory'
 
-    _instanceof:
-        IServ\CoreBundle\EventListener\MainMenuListenerInterface:
-            tags:
-              - { name: kernel.event_listener, event: iserv_portal.menu_main, method: onBuildMainMenu }
-
     Stsbl\InternetBundle\:
         resource: '../../'
         exclude: '../../{DependencyInjection,Form/Data,Security}'
-
-    Stsbl\InternetBundle\Crud\NacCrud:
-        calls:
-            - [setLogger, ["@iserv.logger"]]
-
-    Stsbl\InternetBundle\Controller\:
-        resource: '../../Controller'
-        tags: ['controller.service_arguments']
 
 imports:
     - { resource: legacy_aliases.yml }

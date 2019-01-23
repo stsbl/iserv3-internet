@@ -68,11 +68,11 @@ class NacController extends StrictCrudController
             $warnings = $this->nacManager->getNacWarnings();
 
             if (count($warnings) > 0) {
-                $this->get('iserv.flash')->alert(join("\n", $warnings));
+                $this->addFlash('alert', join("\n", $warnings));
             }
 
             if ($created > 0) {
-                $this->get('iserv.flash')->success(_n('The NAC has been created.', 'The NACs have been created.', $created));
+                $this->addFlash('success', _n('The NAC has been created.', 'The NACs have been created.', $created));
 
                 return $this->redirect($this->generateUrl('internet_manage_nac_index'));
             }

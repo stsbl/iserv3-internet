@@ -46,6 +46,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class NacCrud extends AbstractCrud
 {
     use LoggerTrait;
+
     /**
      * @var Time
      */
@@ -195,7 +196,7 @@ class NacCrud extends AbstractCrud
         return false;
     }
 
-    public function getFilterSpecification() 
+    public function getFilterSpecification()
     {
         // no filtering for admins
         if ($this->getUser()->isAdmin()) {
@@ -205,4 +206,11 @@ class NacCrud extends AbstractCrud
         return new PropertyMatchSpecification('owner', $this->getUser()->getUsername());
     }
 
+    /**
+     * @required
+     */
+    public function setLogger(Logger $logger): void
+    {
+        $this->logger = $logger;
+    }
 }
