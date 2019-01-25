@@ -1,3 +1,10 @@
+stsbl-iserv3-internet (19.01.25-1) experimental; urgency=medium
+
+  * Removed legacy route annotation usage
+  * Removed legacy service usage
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Fri, 25 Jan 2019 03:17:39 +0100
+
 stsbl-iserv3-internet (18.11.25-1) experimental; urgency=medium
 
   * Adapted module structure to web application move
