@@ -9,6 +9,7 @@ use IServ\CoreBundle\Traits\LoggerTrait;
 use IServ\CrudBundle\Crud\AbstractCrud;
 use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\CrudBundle\Mapper\ListMapper;
+use Stsbl\InternetBundle\Controller\NacController;
 use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Security\Privilege;
 use Stsbl\InternetBundle\Service\NacManager;
@@ -90,7 +91,7 @@ class NacCrud extends AbstractCrud
      */
     public function prepareBreadcrumbs()
     {
-        return array(_('Internet') => $this->router->generate('internet_index'));
+        return [_('Internet') => $this->router->generate('internet_index')];
     }
 
     /**
@@ -100,7 +101,7 @@ class NacCrud extends AbstractCrud
     {
         parent::buildRoutes();
 
-        $this->routes['index']['_controller'] = 'StsblInternetBundle:Nac:index';
+        $this->routes['index']['_controller'] = NacController::class . '::indexAction';
     }
 
     /**
@@ -113,8 +114,7 @@ class NacCrud extends AbstractCrud
         $value = $this->time->intervalToString($nac->getRemain());
         if ($nac->getUser() === null) {
             $msg = sprintf('NAC "%s" mit %s verbleibender Zeit erstellt von "%s" gelöscht', $nac->getId(), $value, $nac->getOwner()->getName());
-        }
-        else {
+        } else {
             $msg = sprintf('NAC "%s" mit %s verbleibender Zeit erstellt von "%s" und vergeben an "%s" gelöscht', $nac->getId(), $value, $nac->getOwner()->getName(), $nac->getUser()->getName());
         }
         $this->log($msg);
@@ -140,7 +140,7 @@ class NacCrud extends AbstractCrud
             ->add('assigned', 'datetime', array('label' => _('Assigned on'), 'responsive' => 'desktop'))
             ->add('ip', null, array(
                 'template' => 'StsblInternetBundle:List:field_status.html.twig',
-                'label' => _('Status'), 
+                'label' => _('Status'),
                 'responsive' => 'desktop'))
         ;
     }
@@ -200,7 +200,7 @@ class NacCrud extends AbstractCrud
     {
         // no filtering for admins
         if ($this->getUser()->isAdmin()) {
-            return;
+            return null;
         }
 
         return new PropertyMatchSpecification('owner', $this->getUser()->getUsername());
