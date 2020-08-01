@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-08-02 01:07+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Assigned on"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Assigned to"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#, php-format
+msgid "By: %s"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "Create"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
+msgid "Create new NACs"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Created by"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Created on"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "Duration"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "For"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+msgid "Grant access"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+#: modules/Stsbl/InternetBundle/EventListener/MenuListener.php
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Internet"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Internet Access"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Internet access denied"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Internet access granted"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+msgid "Internet access with NAC successful granted."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+msgid "Internet access with NAC successful revoked."
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Internet activation not possible"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "Manage NACs"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+msgid "NAC"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/print.html.twig.php
+#, php-format
+msgid "NACs created by: %s"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Service/NacManager.php
+#, php-format
+msgid "Not created a NAC for %s, because User %s has already a NAC."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "Number"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/List/field_status.html.twig.php
+msgid "Offline"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Data/CreateNacs.php
+msgid "Please choose a group"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Data/CreateNacs.php
+msgid "Please choose a user"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
+msgid "Print unassigned NACs"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Remaining"
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#, php-format
+msgid "Remaining time: %s"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+msgid "Revoke"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+msgid "Status"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Controller/NacController.php
+msgid "The NAC has been created."
+msgid_plural "The NACs have been created."
+msgstr[0] ""
+msgstr[1] ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "The internet activation is only available from LAN hosts."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Validator/Constraints/Nac.php
+msgid "This is not a valid NAC."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Validator/Constraints/Nac.php
+msgid "This is not a valid NAC. A NAC consists of eight numbers."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Data/CreateNacs.php
+#, php-format
+msgid "This value should be greater than %s."
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Data/CreateNacs.php
+#, php-format
+msgid "This value should be less than or equal to %s."
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#, php-format
+msgid "Until: %s"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Validator/Constraints/Nac.php
+msgid "You not own this NAC."
+msgstr ""
+
+#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+msgid "You still have an active NAC. You may revoke it now:"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "all members of a group"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "all users"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "free usage"
+msgstr ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: modules/Stsbl/InternetBundle/Form/Type/NacCreateType.php
+msgid "user"
+msgstr ""
