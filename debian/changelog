@@ -3,7 +3,7 @@ stsbl-iserv3-internet (20.08.02-1) testing; urgency=medium
   * Bumped copyright
   * Updated locale handling to use genpo
 
- -- Stadtteilschule Blankenese <repository@stsbl.de>  Sun, 02 Aug 2020 06:33:15 +0200
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Sun, 02 Aug 2020 06:53:59 +0200
 
 stsbl-iserv3-internet (19.08.08-1) experimental; urgency=medium
 
