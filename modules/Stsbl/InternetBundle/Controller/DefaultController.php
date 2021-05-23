@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Controller;
 
 use IServ\CoreBundle\Controller\AbstractPageController;
-use IServ\CoreBundle\Service\Config;
 use IServ\HostBundle\Service\Network;
+use IServ\Library\Config\Config;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Service\NacManager;
 use Stsbl\InternetBundle\Validator\Constraints\Nac;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -42,29 +47,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class DefaultController extends AbstractPageController
+final class DefaultController extends AbstractPageController
 {
-    public function getNacManager(): NacManager
+    private function getNacForm(): FormInterface
     {
-        return $this->get('stsbl.internet.nac_manager');
-    }
+        $builder = $this->formFactory()->createNamedBuilder('nac');
 
-    public function getNetworkService(): Network
-    {
-        return $this->get('iserv.host.network');
-    }
-
-    /**
-     * Get NAC form
-     *
-     * @return \Symfony\Component\Form\Form
-     */
-    private function getNacForm()
-    {
-        /* @var $builder \Symfony\Component\Form\FormBuilder */
-        $builder = $this->get('form.factory')->createNamedBuilder('nac');
-
-        if (!$this->getNacManager()->hasNac()) {
+        if (!$this->nacManager()->hasNac()) {
             $builder
                 ->add('nac', TextType::class, [
                     'label' => false,
@@ -77,7 +66,7 @@ class DefaultController extends AbstractPageController
             ;
         }
 
-        if (($this->getNacManager()->hasNac() && $this->getNacManager()->getUserNac()->getTimer() == null) || !$this->getNacManager()->hasNac()) {
+        if (!$this->nacManager()->hasNac() || ($this->nacManager()->hasNac() && $this->nacManager()->getUserNac()->getTimer() == null)) {
             $builder
                 ->add('grant', SubmitType::class, [
                     'label' => _('Grant access'),
@@ -102,11 +91,9 @@ class DefaultController extends AbstractPageController
      * @Route("/internet", name="internet_index")
      * @Template()
      *
-     * @param Config $config
-     * @param Request $request
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return array|RedirectResponse
      */
-    public function indexAction(Config $config, Request $request)
+    public function index(Config $config, Request $request)
     {
         if (!$config->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
@@ -116,16 +103,13 @@ class DefaultController extends AbstractPageController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $nac = null;
-            if (isset($form->getData()['nac'])) {
-                $nac = $form->getData()['nac'];
-            }
+            $nac = $form->getData()['nac'] ?? null;
 
             if ($form->has('grant') && $form->get('grant')->isClicked()) {
-                $this->getNacManager()->grantInternet($nac);
+                $this->nacManager()->grantInternet($nac);
                 $this->addFlash('success', _('Internet access with NAC successful granted.'));
             } elseif ($form->has('revoke') && $form->get('revoke')->isClicked()) {
-                $this->getNacManager()->revokeInternet($request->getClientIp());
+                $this->nacManager()->revokeInternet($request->getClientIp());
                 $this->addFlash('success', _('Internet access with NAC successful revoked.'));
             }
 
@@ -141,16 +125,30 @@ class DefaultController extends AbstractPageController
         ];
     }
 
+    public function nacManager(): NacManager
+    {
+        return $this->container->get(NacManager::class);
+    }
+
+    public function network(): Network
+    {
+        return $this->container->get(Network::class);
+    }
+
+    private function formFactory(): FormFactoryInterface
+    {
+        return $this->get('form.factory');
+    }
+
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
-        $result = parent::getSubscribedServices();
+        $deps = parent::getSubscribedServices();
+        $deps[] = NacManager::class;
+        $deps[] = Network::class;
 
-        $result['stsbl.internet.nac_manager'] = NacManager::class;
-        $result['iserv.host.network'] = Network::class;
-
-        return $result;
+        return $deps;
     }
 }

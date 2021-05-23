@@ -1,9 +1,12 @@
 <?php
-// src/Stsbl/InternetBundle/StsblInternetBundle.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle;
 
 use IServ\CoreBundle\Routing\AutoloadRoutingBundleInterface;
 use Stsbl\InternetBundle\DependencyInjection\StsblInternetExtension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /*
@@ -34,9 +37,12 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class StsblInternetBundle extends Bundle implements AutoloadRoutingBundleInterface
+final class StsblInternetBundle extends Bundle implements AutoloadRoutingBundleInterface
 {
-    public function getContainerExtension() 
+    /**
+     * {@inheritDoc}
+     */
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new StsblInternetExtension();
     }

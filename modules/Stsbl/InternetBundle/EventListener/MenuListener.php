@@ -1,11 +1,13 @@
 <?php
-// src/Stsbl/InternetBundle/EventListener/MenuListener.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\EventListener;
 
 use IServ\CoreBundle\Event\MenuEvent;
 use IServ\CoreBundle\EventListener\MainMenuListenerInterface;
 use IServ\CoreBundle\Menu\MenuBuilder;
-use IServ\CoreBundle\Service\Config;
+use IServ\Library\Config\Config;
 
 /*
  * The MIT License
@@ -37,18 +39,13 @@ use IServ\CoreBundle\Service\Config;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licneses/MIT>
  */
-class MenuListener implements MainMenuListenerInterface
+final class MenuListener implements MainMenuListenerInterface
 {
     /**
      * @var Config
      */
     private $config;
 
-    /**
-     * The constructor.
-     * 
-     * @param Config $config
-     */
     public function __construct(Config $config)
     {
         $this->config = $config;
@@ -57,7 +54,7 @@ class MenuListener implements MainMenuListenerInterface
     /**
      * {@inheritdoc}
      */
-    public function onBuildMainMenu(MenuEvent $event) 
+    public function onBuildMainMenu(MenuEvent $event): void
     {
         // disable internet module if activation is disabled
         if (!$this->config->get('Activation')) {

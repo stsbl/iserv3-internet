@@ -1,5 +1,7 @@
 <?php
-// src/Stsbl/InternetBundle/Validator/Constraints/Nac.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -35,38 +37,29 @@ use Symfony\Component\Validator\Constraint;
  * @license MIT license <https://opensource.org/licenses/MIT>
  * @Annotation
  */
-class Nac extends Constraint
+final class Nac extends Constraint
 {
     public $message = 'This is not a valid NAC.';
 
     /**
      * {@inheritdoc}
      */
-    public function getTargets() 
+    public function getTargets()
     {
         return self::PROPERTY_CONSTRAINT;
     }
 
-    /**
-     * @return string
-     */
-    public function getInvalidNacMessage()
+    public function getInvalidNacMessage(): string
     {
         return _('This is not a valid NAC.');
     }
 
-    /**
-     * @return string
-     */
-    public function getWrongFormatMessage()
+    public function getWrongFormatMessage(): string
     {
         return _('This is not a valid NAC. A NAC consists of eight numbers.');
     }
 
-    /**
-     * @return string
-     */
-    public function getWrongOwnerMessage()
+    public function getWrongOwnerMessage(): string
     {
         return _('You not own this NAC.');
     }
@@ -74,7 +67,7 @@ class Nac extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOption() 
+    public function getDefaultOption(): ?string
     {
         return 'message';
     }

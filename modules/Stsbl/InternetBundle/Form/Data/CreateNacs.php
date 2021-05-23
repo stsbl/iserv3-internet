@@ -1,5 +1,7 @@
 <?php
-// src/Stsbl/InternetBundle/Form/Data/CreateNacs.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Form\Data;
 
 use IServ\CoreBundle\Entity\Group;
@@ -36,28 +38,32 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class CreateNacs
+final class CreateNacs
 {
+    public const ASSIGNMENT_TYPE_USER = 'user';
+    public const ASSIGNMENT_TYPE_GROUP = 'group';
+    public const ASSIGNMENT_TYPE_FREE_USAGE = 'free_usage';
+    public const ASSIGNMENT_TYPE_ALL = 'all';
+
     /**
      * @Assert\NotBlank()
      * @Assert\GreaterThan(value="0")
      *
-     * @var int
+     * @var int|null
      */
     private $duration;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Choice(choices={"free_usage", "user", "group", "all"})
-     *
-     * @var string
+     * @Assert\Choice(choices={"free_usage", "group", "user", "all"})
+     * @var string|null
      */
     private $assignment;
 
     /**
      * @Assert\NotBlank()
      *
-     * @var User|null
+     * @var User
      */
     private $creator;
 
@@ -76,17 +82,20 @@ class CreateNacs
      */
     private $count;
 
+    public function __construct(User $creator)
+    {
+        $this->creator = $creator;
+    }
+
     /**
      * @Assert\Callback()
-     *
-     * @param ExecutionContextInterface $context
      */
-    public function validateUser(ExecutionContextInterface $context)
+    public function validateUser(ExecutionContextInterface $context): void
     {
-        if ('user' === $this->assignment && null === $this->user) {
+        if (self::ASSIGNMENT_TYPE_USER === $this->assignment && null === $this->user) {
             $context
                 ->buildViolation(_('Please choose a user'))
-                ->atPath('user')
+                ->atPath(self::ASSIGNMENT_TYPE_USER)
                 ->addViolation()
             ;
         }
@@ -94,15 +103,13 @@ class CreateNacs
 
     /**
      * @Assert\Callback()
-     *
-     * @param ExecutionContextInterface $context
      */
-    public function validateGroup(ExecutionContextInterface $context)
+    public function validateGroup(ExecutionContextInterface $context): void
     {
-        if ('group' === $this->assignment && null === $this->group) {
+        if (self::ASSIGNMENT_TYPE_GROUP === $this->assignment && null === $this->group) {
             $context
                 ->buildViolation(_('Please choose a group'))
-                ->atPath('group')
+                ->atPath(self::ASSIGNMENT_TYPE_GROUP)
                 ->addViolation()
             ;
         }
@@ -113,9 +120,9 @@ class CreateNacs
      *
      * @param ExecutionContextInterface $context
      */
-    public function validateCount(ExecutionContextInterface $context)
+    public function validateCount(ExecutionContextInterface $context): void
     {
-        if ($this->assignment === 'free_usage') {
+        if (self::ASSIGNMENT_TYPE_FREE_USAGE === $this->assignment) {
             if ($this->count === null || !is_numeric($this->count) || $this->count <= 0) {
                 $context
                     ->buildViolation(__('This value should be greater than %s.', 0))
@@ -132,99 +139,83 @@ class CreateNacs
         }
     }
 
-    /**
-     * @return int
-     */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
     /**
-     * @param int $duration
+     * @return $this
      */
-    public function setDuration($duration)
+    public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAssignment()
+    public function getAssignment(): ?string
     {
         return $this->assignment;
     }
 
     /**
-     * @param string $assignment
+     * @return $this
      */
-    public function setAssignment($assignment)
+    public function setAssignment(?string $assignment): self
     {
         $this->assignment = $assignment;
+
+        return $this;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * @param User|null $user
+     * @return $this
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
+
+        return $this;
     }
 
-    /**
-     * @return Group|null
-     */
-    public function getGroup()
+    public function getGroup(): ?Group
     {
         return $this->group;
     }
 
     /**
-     * @param Group|null $group
+     * @return $this
      */
-    public function setGroup(Group $group = null)
+    public function setGroup(?Group $group): self
     {
         $this->group = $group;
+
+        return $this;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getCount()
+    public function getCount(): ?int
     {
         return $this->count;
     }
 
     /**
-     * @param int|null $count
+     * @return $this
      */
-    public function setCount($count)
+    public function setCount(?int $count): self
     {
         $this->count = $count;
+
+        return $this;
     }
 
-    /**
-     * @return User|null
-     */
-    public function getCreator()
+    public function getCreator(): User
     {
         return $this->creator;
-    }
-
-    /**
-     * @param User|null $creator
-     */
-    public function setCreator(User $creator = null)
-    {
-        $this->creator = $creator;
     }
 }

@@ -1,5 +1,7 @@
 <?php
-// src/Stsbl/InternetBundle/Security/Privilege.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Security;
 
 /*
@@ -32,7 +34,7 @@ namespace Stsbl\InternetBundle\Security;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-final class Privilege 
+final class Privilege
 {
-    const INET_NACS = 'PRIV_INET_NACS';
+    public const INET_NACS = 'PRIV_INET_NACS';
 }

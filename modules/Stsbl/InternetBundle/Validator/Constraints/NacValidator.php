@@ -1,9 +1,11 @@
 <?php
-// src/Stsbl/InternetBundle/Validator/Constraints/NacValidator.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Validator\Constraints;
 
 use Doctrine\ORM\EntityManagerInterface;
-use IServ\CoreBundle\Security\Core\SecurityHandler;
+use IServ\CoreBundle\Service\User\UserStorageInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -39,7 +41,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * @license MIT license <https://opensource.org/licenses/MIT>
  * @Annotation
  */
-class NacValidator extends ConstraintValidator 
+final class NacValidator extends ConstraintValidator
 {
     /**
      * @var EntityManagerInterface
@@ -47,46 +49,38 @@ class NacValidator extends ConstraintValidator
     private $em;
 
     /**
-     * @var SecurityHandler
+     * @var UserStorageInterface
      */
     private $securityHandler;
 
-    /**
-     * The constructor
-     *
-     * @param EntityManagerInterface $em
-     * @param SecurityHandler $securityHandler
-     */
-    public function __construct(EntityManagerInterface $em, SecurityHandler $securityHandler)
+    public function __construct(EntityManagerInterface $em, UserStorageInterface $userStorage)
     {
         $this->em = $em;
-        $this->securityHandler = $securityHandler;
+        $this->securityHandler = $userStorage;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validate($nac, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof Nac) {
             throw new UnexpectedTypeException($constraint, Nac::class);
         }
 
-        /* @var $constraint Nac */
-        if (!preg_match('|^[0-9]{8}$|', $nac)) {
+        if (!preg_match('|^[0-9]{8}$|', $value)) {
             $this->context->buildViolation($constraint->getWrongFormatMessage())->atPath('nac')->addViolation();
             return;
         }
 
-        /* @var $nacEntity \Stsbl\InternetBundle\Entity\Nac */
-        $nacEntity = $this->em->getRepository('StsblInternetBundle:Nac')->findOneByNac($nac);
+        $nacEntity = $this->em->getRepository(\Stsbl\InternetBundle\Entity\Nac::class)->findOneByNac($value);
 
-        if ($nacEntity === null) {
+        if (null === $nacEntity) {
             $this->context->buildViolation($constraint->getInvalidNacMessage())->atPath('nac')->addViolation();
             return;
         }
 
-        if ($nacEntity->getUser() != $this->securityHandler->getUser() && $nacEntity->getUser() !== null) {
+        if ($nacEntity->getUser() !== $this->securityHandler->getUser() && $nacEntity->getUser() !== null) {
             $this->context->buildViolation($constraint->getWrongOwnerMessage())->atPath('nac')->addViolation();
         }
     }

@@ -1,10 +1,11 @@
 <?php
-// src/Stsbl/InternetBundle/Entity/NacRepository.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Entity;
 
-use Doctrine\ORM\NoResultException;
+use IServ\CoreBundle\Entity\User;
 use IServ\CrudBundle\Doctrine\ORM\EntitySpecificationRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /*
  * The MIT License
@@ -34,30 +35,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class NacRepository extends EntitySpecificationRepository
+final class NacRepository extends EntitySpecificationRepository
 {
     /**
      * Checks if user has a NAC in the database.
-     * 
-     * @param UserInterface $user
-     * @return bool
      */
-    public function hasNac(UserInterface $user)
+    public function hasNac(User $user): bool
     {
-        try {
-            return $this->findOneBy(['user' => $user]) != null;
-        } catch (NoResultException $e) {
-            return false;
-        }
+        return $this->findOneBy(['user' => $user]) !== null;
     }
 
     /**
      * Get current NAC for user.
-     * 
-     * @param UserInterface $user
-     * @return Nac
      */
-    public function findNacByUser(UserInterface $user)
+    public function findNacByUser(User $user): Nac
     {
         if (!$this->hasNac($user)) {
             throw new \RuntimeException(sprintf('User %s has no NAC!', (string)$user));

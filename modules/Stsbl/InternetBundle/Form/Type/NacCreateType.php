@@ -1,5 +1,7 @@
 <?php
-// src/Stsbl/InternetBundle/Form/Type/Nac.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
@@ -18,12 +20,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * Used in NAC-CRUD index action
  */
-class NacCreateType extends AbstractType
+final class NacCreateType extends AbstractType
 {
-    const MAX_NAC_VALUE = 99999;
-    const MAX_UNASSIGNED_NAC_COUNT = 100;
+    public const MAX_NAC_VALUE = 99999;
+    public const MAX_UNASSIGNED_NAC_COUNT = 100;
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    /**
+     * {@inheritDoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
         $builder
@@ -54,7 +59,7 @@ class NacCreateType extends AbstractType
             ->add('user', UserType::class, [
                 'multiple' => false,
                 'order_by' => null,
-                'query_builder' => function(EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) {
                     // Manually filter deleted entries due to #1124. I have seriously no f***ing clue. :(
                     return $er->createQueryBuilder('u')->andWhere('u.deleted IS NULL')->orderBy('u.firstname, u.lastname', 'ASC');
                 },
@@ -62,7 +67,7 @@ class NacCreateType extends AbstractType
             ->add('group', GroupType::class, [
                 'multiple' => false,
                 'order_by' => null,
-                'query_builder' => function(EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) {
                     // Manually filter deleted entries due to #1124. I have seriously no f***ing clue. :(
                     return $er->createQueryBuilder('g')->select('g, LOWER(g.name) AS HIDDEN lcName')->andWhere('g.deleted IS NULL')->orderBy('lcName', 'ASC');
                 },
@@ -75,13 +80,19 @@ class NacCreateType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    /**
+     * {@inheritDoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('default_credits', 0);
         $resolver->setDefault('data_class', CreateNacs::class);
     }
 
-    public function getBlockPrefix()
+    /**
+     * {@inheritDoc}
+     */
+    public function getBlockPrefix(): string
     {
         return 'nac_create';
     }

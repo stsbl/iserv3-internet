@@ -1,12 +1,14 @@
 <?php
-// src/Stsbl/InternetBundle/Twig/Extension/Time.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Twig\Extension;
 
 use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
+use Doctrine\DBAL\Driver\Exception;
 use IServ\CoreBundle\Util\Format;
-use \Twig_Environment;
-use \Twig_Extension;
-use \Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /*
  * The MIT License
@@ -38,15 +40,13 @@ use \Twig_SimpleFilter;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class Time extends Twig_Extension
+final class Time extends AbstractExtension
 {
+    /**
+     * @var ConnectionFactory
+     */
     private $connectionFactory;
 
-    /**
-     * The constructor
-     * 
-     * @param ConnectionFactory $connectionFactory
-     */
     public function __construct(ConnectionFactory $connectionFactory)
     {
         $this->connectionFactory = $connectionFactory;
@@ -55,36 +55,30 @@ class Time extends Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
-            'linterval' => new Twig_SimpleFilter('linterval', [$this, 'intervalToString']),
-            'smart_date' => new Twig_SimpleFilter('smart_date', [$this, 'smartDate']),
+            'linterval' => new TwigFilter('linterval', [$this, 'intervalToString']),
+            'smart_date' => new TwigFilter('smart_date', [$this, 'smartDate']),
         ];
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'time';
-    }
-
-    /**
      * Converts postgresql interval in a human readable string.
-     * 
-     * @param string $interval
-     * @return string
      */
-    public function intervalToString($interval)
+    public function intervalToString(string $interval): string
     {
         // parse interval via database connection
         // FIXME This is very UGLY!
         $db = $this->connectionFactory->createConnection(['pdo' => new \PDO('pgsql:dbname=iserv', 'symfony')]);
-        $statement = $db->prepare('SELECT EXTRACT(EPOCH FROM ?::interval)');
-        $statement->execute([$interval]);
-        $seconds = (float)$statement->fetch()['date_part'];
+        try {
+            $statement = $db->prepare('SELECT EXTRACT(EPOCH FROM ?::interval)');
+            $statement->execute([$interval]);
+            $seconds = (float)$statement->fetchAssociative()['date_part'];
+        } catch (Exception $e) {
+            throw new \RuntimeException('Could not fetch.', 0, $e);
+        }
+
         $db->close();
 
         $a['d'] = floor($seconds / 86400);
@@ -94,25 +88,20 @@ class Time extends Twig_Extension
         $res = [];
         foreach ($a as $key => $v) {
             if ($v or $res) {
-                $res[] = sprintf($res? '%02d': '%d', $v).$key;
+                $res[] = sprintf($res ? '%02d' : '%d', $v) . $key;
             }
         }
 
-        return join(' ', $res);
+        return implode(' ', $res);
     }
 
     /**
      * Example: 8:30 AM; So, 11:15 PM; Dec 24th; Jan 1st, 05
-     * 
+     *
      * @param \DateTime|string|int $datetime
-     * @deprecated
-     * @return string
      */
-    public function smartDate($datetime)
+    public function smartDate($datetime): string
     {
-        @trigger_error(sprintf('The direct usage of %s in %s is deprecated and will removed in future versions. ' .
-            'Use the function from %s instead.', __FUNCTION__, self::class, Format::class));
-
         return Format::smartDate($datetime);
     }
 }

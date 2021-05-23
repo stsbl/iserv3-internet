@@ -1,10 +1,13 @@
 <?php
-// src/Stsbl/InternetBundle/Entity/Nac.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use IServ\CoreBundle\Entity\User;
 use IServ\CrudBundle\Entity\CrudInterface;
+use IServ\Library\Zeit\Zeit;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /*
@@ -74,17 +77,17 @@ class Nac implements CrudInterface
     private $ip;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
-     * @var string
+     * @var string|null
      */
     private $remain;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      *
-     * @var \DateTime
+     * @var string|null
      */
     private $timer;
 
@@ -96,9 +99,9 @@ class Nac implements CrudInterface
     private $expire;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      *
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     private $created;
 
@@ -114,238 +117,154 @@ class Nac implements CrudInterface
      */
     public function __construct()
     {
-        $this->created = new \DateTime();
+        $this->created = Zeit::now();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __toString() 
+    public function __toString(): string
     {
-        return $this->nac;
+        return $this->nac ?? '?';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->nac;
     }
 
 
     /**
-     * Set nac
-     *
-     * @param string $nac
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setNac($nac)
+    public function setNac(?string $nac): self
     {
         $this->nac = $nac;
 
         return $this;
     }
 
-    /**
-     * Get nac
-     *
-     * @return string
-     */
-    public function getNac()
+    public function getNac(): ?string
     {
         return $this->nac;
     }
 
-    /**
-     * Set remain
-     *
-     * @param string $remain
-     *
-     * @return Nac
-     */
-    public function setRemain($remain)
+    public function setRemain(?string $remain): self
     {
         $this->remain = $remain;
 
         return $this;
     }
 
-    /**
-     * Get remain
-     *
-     * @return string
-     */
-    public function getRemain()
+    public function getRemain(): ?string
     {
         return $this->remain;
     }
 
     /**
-     * Set timer
-     *
-     * @param \DateTime $timer
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setTimer($timer)
+    public function setTimer(?string $timer): self
     {
         $this->timer = $timer;
 
         return $this;
     }
 
-    /**
-     * Get timer
-     *
-     * @return \DateTime
-     */
-    public function getTimer()
+    public function getTimer(): ?string
     {
         return $this->timer;
     }
 
     /**
-     * Set expire
-     *
-     * @param \DateTime $expire
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setExpire($expire)
+    public function setExpire(\DateTime $expire): self
     {
         $this->expire = $expire;
 
         return $this;
     }
 
-    /**
-     * Get expire
-     *
-     * @return \DateTime
-     */
-    public function getExpire()
+    public function getExpire(): ?\DateTime
     {
         return $this->expire;
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setCreated($created)
+    public function setCreated(?\DateTimeImmutable $created): self
     {
         $this->created = $created;
 
         return $this;
     }
 
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
+    public function getCreated(): ?\DateTimeImmutable
     {
         return $this->created;
     }
 
     /**
-     * Set assigned
-     *
-     * @param \DateTime $assigned
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setAssigned($assigned)
+    public function setAssigned(?\DateTime $assigned): self
     {
         $this->assigned = $assigned;
 
         return $this;
     }
 
-    /**
-     * Get assigned
-     *
-     * @return \DateTime
-     */
-    public function getAssigned()
+    public function getAssigned(): ?\DateTime
     {
         return $this->assigned;
     }
 
     /**
-     * Set user
-     *
-     * @param \IServ\CoreBundle\Entity\User $user
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setUser(User $user = null)
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get user
-     *
-     * @return \IServ\CoreBundle\Entity\User
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * Set owner
-     *
-     * @param User $owner
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setOwner(User $owner = null)
+    public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
 
         return $this;
     }
 
-    /**
-     * Get owner
-     *
-     * @return User
-     */
-    public function getOwner()
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
     /**
-     * Set ip
-     *
-     * @param inet $ip
-     *
-     * @return Nac
+     * @return $this
      */
-    public function setIp($ip)
+    public function setIp(?string $ip): self
     {
         $this->ip = $ip;
 
         return $this;
     }
 
-    /**
-     * Get ip
-     *
-     * @return inet
-     */
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }

@@ -1,8 +1,7 @@
-{# src/Stsbl/InternetBundle/Resources/views/Default/index.html.twig #}
-{% extends 'IServCoreBundle::page.html.twig' %}
+{% extends '@IServCore/page.html.twig' %}
 
-{% set nacManager = controller.getNacManager() %}
-{% set networkService = controller.getNetworkService() %}
+{% set nacManager = controller.nacManager %}
+{% set networkService = controller.network %}
 
 {% block page_title %}
     {% spaceless %}

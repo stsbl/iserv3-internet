@@ -1,14 +1,19 @@
 <?php
-// src/Stsbl/InternetBundle/Crud/NacCrud.php
+
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Crud;
 
 use IServ\CoreBundle\Entity\Specification\PropertyMatchSpecification;
-use IServ\CoreBundle\Service\Config;
 use IServ\CoreBundle\Service\Logger;
 use IServ\CoreBundle\Traits\LoggerTrait;
-use IServ\CrudBundle\Crud\AbstractCrud;
+use IServ\CrudBundle\Crud\ServiceCrud;
+use IServ\CrudBundle\Doctrine\Specification\SpecificationInterface;
 use IServ\CrudBundle\Entity\CrudInterface;
 use IServ\CrudBundle\Mapper\ListMapper;
+use IServ\CrudBundle\Routing\RoutingDefinition;
+use IServ\CrudBundle\Table\Specification\FilterExpression;
+use IServ\Library\Config\Config;
 use Stsbl\InternetBundle\Controller\NacController;
 use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Security\Privilege;
@@ -44,43 +49,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class NacCrud extends AbstractCrud
+final class NacCrud extends ServiceCrud
 {
     use LoggerTrait;
 
     /**
-     * @var Time
+     * {@inheritDoc}
      */
-    private $time;
-
-    /**
-     * @var NacManager
-     */
-    private $manager;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * The constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct(Nac::class);
-    }
+    protected static $entityClass = Nac::class;
 
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->title = _('Manage NACs');
         $this->itemTitle = 'NAC';
-        $this->routesPrefix = 'internet/manage/';
-        $this->routesNamePrefix = 'internet_manage_';
-        //$this->options['help'] = 'v3/modules/network/print/';
         $this->templates['crud_index'] = 'StsblInternetBundle:Nac:index.html.twig';
 
         $this->logModule = 'Internet';
@@ -89,29 +73,31 @@ class NacCrud extends AbstractCrud
     /**
      * {@inheritdoc}
      */
-    public function prepareBreadcrumbs()
+    public function prepareBreadcrumbs(): array
     {
-        return [_('Internet') => $this->router->generate('internet_index')];
+        return [_('Internet') => $this->router()->generate('internet_index')];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function defineRoutes(): RoutingDefinition
+    {
+        return parent::defineRoutes()
+            ->useControllerForAction(self::ACTION_INDEX, NacController::class . '::indexAction')
+            ->setNamePrefix('internet_manage_')
+            ->setPathPrefix('/internet/manage/')
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function buildRoutes()
-    {
-        parent::buildRoutes();
-
-        $this->routes['index']['_controller'] = NacController::class . '::indexAction';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function postRemove(CrudInterface $nac)
+    public function postRemove(CrudInterface $object): void
     {
         // Log deletion of NACs
-        /* @var $nac Nac */
-        $value = $this->time->intervalToString($nac->getRemain());
+        /* @var Nac $nac */
+        $value = $this->time()->intervalToString($nac->getRemain());
         if ($nac->getUser() === null) {
             $msg = sprintf('NAC "%s" mit %s verbleibender Zeit erstellt von "%s" gelöscht', $nac->getId(), $value, $nac->getOwner()->getName());
         } else {
@@ -119,91 +105,81 @@ class NacCrud extends AbstractCrud
         }
         $this->log($msg);
         // run inet_timer to disable deleted NACs
-        $this->manager->inetTimer();
+        $this->nacManager()->inetTimer();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureListFields(ListMapper $listMapper)
+    public function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('nac', null, array('label' => _('NAC'), 'responsive' => 'all'))
-            ->add('owner', 'entity', array('label' => _('Created by'), 'responsive' => 'desktop'))
-            ->add('created', 'datetime', array('label' => _('Created on'), 'responsive' => 'desktop'))
-            ->add('remain', null, array(
+            ->add('nac', null, ['label' => _('NAC'), 'responsive' => 'all'])
+            ->add('owner', 'entity', ['label' => _('Created by'), 'responsive' => 'desktop'])
+            ->add('created', 'datetime', ['label' => _('Created on'), 'responsive' => 'desktop'])
+            ->add('remain', null, [
                 'template' => 'StsblInternetBundle:List:field_interval.html.twig',
                 'label' => _('Remaining'),
                 'responsive' => 'min-mobile',
-            ))
-            ->add('user', 'entity', array('label' => _('Assigned to'), 'responsive' => 'all'))
-            ->add('assigned', 'datetime', array('label' => _('Assigned on'), 'responsive' => 'desktop'))
-            ->add('ip', null, array(
+            ])
+            ->add('user', 'entity', ['label' => _('Assigned to'), 'responsive' => 'all'])
+            ->add('assigned', 'datetime', ['label' => _('Assigned on'), 'responsive' => 'desktop'])
+            ->add('ip', null, [
                 'template' => 'StsblInternetBundle:List:field_status.html.twig',
                 'label' => _('Status'),
-                'responsive' => 'desktop'))
+                'responsive' => 'desktop'])
         ;
     }
 
-    /*** SETTERS ***/
 
     /**
-     * @param Time $time
-     * @required
+     * {@inheritDoc}
      */
-    public function setTwigTimeExtension(Time $time)
-    {
-        $this->time = $time;
-    }
-
-    /**
-     * @param NacManager $manager
-     * @required
-     */
-    public function setManager(NacManager $manager)
-    {
-        $this->manager = $manager;
-    }
-
-    /**
-     * @param Config $config
-     * @required
-     */
-    public function setConfig(Config $config)
-    {
-        $this->config = $config;
-    }
-
-    /*** SECURITY ***/
-
-    public function isAuthorized()
-    {
-        return $this->isGranted(Privilege::INET_NACS) && $this->config->get('Activation');
-    }
-
-    public function isAllowedToView(CrudInterface $object = null, UserInterface $user = null)
+    public function isAllowedTo(string $action, UserInterface $user, CrudInterface $object = null): bool
     {
         return false;
     }
 
-    public function isAllowedToAdd(UserInterface $user = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function isAuthorized(): bool
     {
-        return false;
+        return $this->authorizationChecker()->isGranted(Privilege::INET_NACS) && $this->config()->get('Activation');
     }
 
-    public function isAllowedToEdit(CrudInterface $object = null, UserInterface $user = null)
-    {
-        return false;
-    }
-
-    public function getFilterSpecification()
+    /**
+     * {@inheritDoc}
+     */
+    public function getFilterSpecification(): ?SpecificationInterface
     {
         // no filtering for admins
-        if ($this->getUser()->isAdmin()) {
+        $user = $this->getUser();
+
+        if ($user !== null && $user->isAdmin()) {
             return null;
         }
 
-        return new PropertyMatchSpecification('owner', $this->getUser()->getUsername());
+        // No user => failsafe
+        if (null === $user) {
+            return new FilterExpression('1 = 2');
+        }
+        return new PropertyMatchSpecification('owner', $user->getUsername());
+    }
+
+    private function config(): Config
+    {
+        return $this->locator->get(Config::class);
+    }
+
+    private function nacManager(): NacManager
+    {
+        return $this->locator->get(NacManager::class);
+    }
+
+    private function time(): Time
+    {
+        return $this->locator->get(Time::class);
     }
 
     /**
@@ -212,5 +188,18 @@ class NacCrud extends AbstractCrud
     public function setLogger(Logger $logger): void
     {
         $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedServices(): array
+    {
+        $deps = parent::getSubscribedServices();
+        $deps[] = Config::class;
+        $deps[] = NacManager::class;
+        $deps[] = Time::class;
+
+        return $deps;
     }
 }

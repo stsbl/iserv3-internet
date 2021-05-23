@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Stsbl\InternetBundle\Controller;
 
-use IServ\CoreBundle\Service\Config;
 use IServ\CrudBundle\Controller\StrictCrudController;
+use IServ\Library\Config\Config;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Stsbl\InternetBundle\Entity\Nac;
@@ -45,7 +47,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Felix Jacobi <felix.jacobi@stsbl.de>
  * @license MIT license <https://opensource.org/licenses/MIT>
  */
-class NacController extends StrictCrudController
+final class NacController extends StrictCrudController
 {
     /**
      * @var NacManager
@@ -57,22 +59,21 @@ class NacController extends StrictCrudController
      */
     public function indexAction(Request $request)
     {
-        $data = new CreateNacs();
-        $data->setCreator($this->getUser());
+        $data = new CreateNacs($this->authenticatedUser());
 
         // NAC add form
         $addForm = $this->createForm(NacCreateType::class, $data, ['default_credits' => 45]);
         $addForm->handleRequest($request);
         if ($addForm->isSubmitted() && $addForm->isValid()) {
-            $created = $this->nacManager->createNacs($addForm->getData());
-            $warnings = $this->nacManager->getNacWarnings();
+            $created = $this->nacManager()->createNacs($addForm->getData());
+            $warnings = $this->nacManager()->getNacWarnings();
 
             if (count($warnings) > 0) {
-                $this->addFlash('alert', join("\n", $warnings));
+                $this->flashMessage()->warning(implode("\n", $warnings));
             }
 
             if ($created > 0) {
-                $this->addFlash('success', _n('The NAC has been created.', 'The NACs have been created.', $created));
+                $this->flashMessage()->success(_n('The NAC has been created.', 'The NACs have been created.', $created));
 
                 return $this->redirect($this->generateUrl('internet_manage_nac_index'));
             }
@@ -91,20 +92,17 @@ class NacController extends StrictCrudController
      * @Route("/internet/manage/nacs/print", name="internet_manage_nacs_print")
      * @Security("is_granted('PRIV_INET_NACS')")
      * @Template()
-     *
-     * @param Config $config
-     * @return array
      */
-    public function printAction(Config $config)
+    public function printAction(Config $config): array
     {
         if (!$config->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');
         }
 
-        $nacs = $this->getDoctrine()->getRepository(Nac::class)->findBy(array(
+        $nacs = $this->getDoctrine()->getRepository(Nac::class)->findBy([
             'user' => null,
             'owner' => $this->getUser(),
-        ));
+        ]);
 
         return [
             'nacs' => $nacs,
@@ -112,13 +110,19 @@ class NacController extends StrictCrudController
         ];
     }
 
-    /**
-     * @param NacManager $nacManager
-     * @required
-     */
-    public function setNacManager(NacManager $nacManager)
+    private function nacManager(): NacManager
     {
-        $this->nacManager = $nacManager;
+        return $this->container->get(NacManager::class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedServices(): array
+    {
+        $deps = parent::getSubscribedServices();
+        $deps[] = NacManager::class;
+
+        return $deps;
+    }
 }

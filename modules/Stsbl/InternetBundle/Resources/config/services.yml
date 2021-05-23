@@ -1,4 +1,3 @@
-# src/Stsbl/InternetBundle/Resources/config/services.yml
 services:
     _defaults:
         autoconfigure: true
@@ -10,6 +9,3 @@ services:
     Stsbl\InternetBundle\:
         resource: '../../'
         exclude: '../../{DependencyInjection,Form/Data,Security}'
-
-imports:
-    - { resource: legacy_aliases.yml }
