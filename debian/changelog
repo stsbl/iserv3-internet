@@ -1,3 +1,14 @@
+stsbl-iserv3-internet (21.06.09.1) testing; urgency=medium
+
+  * Updated license copyright
+  * Fixed Build-Depends
+  * Moved to iservinstall
+  * Updated copyright
+  * Turned source format to native
+  * Fixed deprecations and rectored code
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Wed, 09 Jun 2021 22:52:15 +0200
+
 stsbl-iserv3-internet (20.08.02-1) testing; urgency=medium
 
   * Bumped copyright
