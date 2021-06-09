@@ -1,3 +1,9 @@
+stsbl-iserv3-internet (21.06.09.3) testing; urgency=medium
+
+  * Fixed Build-Depends
+
+ -- Felix Jacobi <Felix@jacobi-hamburg.net>  Wed, 09 Jun 2021 23:18:18 +0200
+
 stsbl-iserv3-internet (21.06.09.2) testing; urgency=medium
 
   * Added homepage
