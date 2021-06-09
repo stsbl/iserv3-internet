@@ -7,6 +7,7 @@ Build-Depends: debhelper-compat (= 13),
                dh-sequence-stsbl,
                iserv3-dev
 Standards-Version: 4.5.0
+Homepage: https://it.stsbl.de/documentation/mods/internet/
 
 Package: stsbl-iserv3-internet
 Architecture: all
