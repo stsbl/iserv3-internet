@@ -10,7 +10,11 @@ Homepage: https://it.stsbl.de/documentation/mods/internet/
 
 Package: stsbl-iserv3-internet
 Architecture: all
-Depends: iserv-internet, iserv3-host, ${misc:Depends}, ${perl:Depends}
+Depends: iserv-internet,
+         iserv3-host,
+         stsbl-iserv3-maintenance,
+         ${misc:Depends},
+         ${perl:Depends}
 Xb-Private-Iserv-Revision: ${iserv:Revision}
 Description: IServ 3: Internetfreigabe
  Dieses Paket enthält die Oberfläche zur Eingabe und Verwaltung von NACs
