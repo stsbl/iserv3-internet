@@ -1,0 +1,5 @@
+inet_nacs:
+module		Internet
+description	Management of NACs
+assignroles	admin
+uuid		8de5b1ca-5bc8-4b25-93b7-046c9fdda8a9

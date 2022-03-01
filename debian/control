@@ -10,7 +10,8 @@ Homepage: https://it.stsbl.de/documentation/mods/internet/
 
 Package: stsbl-iserv3-internet
 Architecture: all
-Depends: iserv-internet,
+Depends: iserv3-core,
+         iserv3-crud,
          iserv3-host,
          stsbl-iserv3-maintenance,
          ${misc:Depends},

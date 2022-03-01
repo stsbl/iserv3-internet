@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-02 01:07+0200\n"
+"POT-Creation-Date: 2022-03-01 19:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Grant access"
 msgstr ""
 
-#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: priv/internet modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: modules/Stsbl/InternetBundle/Controller/DefaultController.php
 #: modules/Stsbl/InternetBundle/EventListener/MenuListener.php
 #: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
@@ -93,6 +93,10 @@ msgstr ""
 #: modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Manage NACs"
+msgstr ""
+
+#: priv/internet
+msgid "Management of NACs"
 msgstr ""
 
 #: modules/Stsbl/InternetBundle/Crud/NacCrud.php

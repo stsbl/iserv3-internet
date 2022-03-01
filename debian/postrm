@@ -1,0 +1,19 @@
+#!/bin/sh
+set -e
+
+rmdir_if_existent()
+{
+  if [ -d "$1" ]
+  then
+    rmdir --ignore-fail-on-non-empty "$1"
+  fi
+}
+
+if [ "$1" = "remove" ]
+then
+  dpkg-divert --package stsbl-iserv3-internet --remove --rename \
+      --divert /usr/share/iserv/priv.disabled/internet /usr/share/iserv/priv/internet
+  rmdir_if_existent /usr/share/iserv/priv.disabled
+fi
+
+#DEBHELPER#

@@ -58,7 +58,7 @@ msgstr "Für"
 msgid "Grant access"
 msgstr "Freischalten"
 
-#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: priv/internet modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: modules/Stsbl/InternetBundle/Controller/DefaultController.php
 #: modules/Stsbl/InternetBundle/EventListener/MenuListener.php
 #: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
@@ -92,6 +92,10 @@ msgstr "Internetfreischaltung nicht möglich"
 #: modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Manage NACs"
+msgstr "NACs verwalten"
+
+#: priv/internet
+msgid "Management of NACs"
 msgstr "NACs verwalten"
 
 #: modules/Stsbl/InternetBundle/Crud/NacCrud.php

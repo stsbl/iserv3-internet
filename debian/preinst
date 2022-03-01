@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "install" ] || [ "$1" = "upgrade" ]
+then
+  mkdir -p /usr/share/iserv/priv.disabled
+
+  dpkg-divert --package stsbl-iserv3-internet --add --rename \
+      --divert /usr/share/iserv/priv.disabled/internet /usr/share/iserv/priv/internet
+fi
+
+#DEBHELPER#
