@@ -65,7 +65,7 @@ final class NacCrud extends ServiceCrud
     {
         $this->title = _('Manage NACs');
         $this->itemTitle = 'NAC';
-        $this->templates['crud_index'] = 'StsblInternetBundle:Nac:index.html.twig';
+        $this->templates['crud_index'] = '@StsblInternet/Nac/index.html.twig';
 
         $this->logModule = 'Internet';
     }
@@ -118,14 +118,14 @@ final class NacCrud extends ServiceCrud
             ->add('owner', 'entity', ['label' => _('Created by'), 'responsive' => 'desktop'])
             ->add('created', 'datetime', ['label' => _('Created on'), 'responsive' => 'desktop'])
             ->add('remain', null, [
-                'template' => 'StsblInternetBundle:List:field_interval.html.twig',
+                'template' => '@StsblInternet/List/field_interval.html.twig',
                 'label' => _('Remaining'),
                 'responsive' => 'min-mobile',
             ])
             ->add('user', 'entity', ['label' => _('Assigned to'), 'responsive' => 'all'])
             ->add('assigned', 'datetime', ['label' => _('Assigned on'), 'responsive' => 'desktop'])
             ->add('ip', null, [
-                'template' => 'StsblInternetBundle:List:field_status.html.twig',
+                'template' => '@StsblInternet/List/field_status.html.twig',
                 'label' => _('Status'),
                 'responsive' => 'desktop'])
         ;
