@@ -4,9 +4,9 @@
 {% set networkService = controller.network %}
 
 {% block page_title %}
-    {% spaceless %}
+    {% apply spaceless %}
         {{ _('Internet') }}
-    {% endspaceless %}
+    {% endapply spaceless %}
 {% endblock %}
 
 {% block stylesheets %}
