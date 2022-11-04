@@ -57,49 +57,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class NacManager
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
+
+    private ?Request $request;
+
+    private Connection $connection;
 
     /**
-     * @var Request
+     * @var string[]
      */
-    private $request;
+    private array $nacWarnings = [];
 
-    /**
-     * @var Shell
-     */
-    private $shell;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
-     * @var UserStorageInterface
-     */
-    private $userStorage;
-
-    /**
-     * @var array
-     */
-    private $nacWarnings = [];
-
-    public function __construct(RequestStack $requestStack, Shell $shell, ManagerRegistry $doctrine, Logger $logger, UserStorageInterface $userStorage)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        private readonly Shell $shell,
+        ManagerRegistry $doctrine,
+        private Logger $logger,
+        private readonly UserStorageInterface $userStorage
+    ) {
         $this->em = $doctrine->getManager();
         $this->request = $requestStack->getCurrentRequest();
-        $this->shell = $shell;
         $this->connection = $doctrine->getConnection();
-        $this->logger = $logger;
-        $this->userStorage = $userStorage;
     }
 
     /**
@@ -143,7 +121,9 @@ final class NacManager
     public function isInternetGranted(): bool
     {
         // ignore if host is not in host management
-        if ($this->em->getRepository('IServHostBundle:Host')->findOneByIp($this->request->getClientIp()) === null) {
+        if ($this->em->getRepository(\IServ\HostBundle\Entity\Host::class)->findOneByIp(
+                $this->request->getClientIp()
+            ) === null) {
             return false;
         }
 
@@ -224,7 +204,7 @@ final class NacManager
     }
 
     /**
-     * Create bunch of NACs using NAC management form
+     * Create a bunch of NACs using NAC management form
      */
     public function createNacs(CreateNacs $createNacs): int
     {
@@ -292,7 +272,7 @@ final class NacManager
 
             case CreateNacs::ASSIGNMENT_TYPE_ALL:
                 // Create NAC for all users
-                $users = $this->em->getRepository('IServCoreBundle:User')->findAll();
+                $users = $this->em->getRepository(\IServ\CoreBundle\Entity\User::class)->findAll();
                 foreach ($users as $user) {
                     // User can only have one NAC at the same time
                     if ($this->hasNac($user)) {
@@ -389,7 +369,7 @@ final class NacManager
     public function grantInternet(?string $nac = null): FlashMessageBag
     {
         if ($nac !== null && !$this->hasNac()) {
-            /* @var $nacData \Stsbl\InternetBundle\Entity\Nac */
+            /* @var $nacData Nac */
             $nacData = $this->em->getRepository(Nac::class)->findOneByNac($nac);
         } else {
             $nacData = $this->getUserNac();
@@ -409,7 +389,7 @@ final class NacManager
 
         $nq
             ->setParameter(1, $this->getUser()->getUsername())
-            ->setParameter(2, $this->request->getClientIp())
+            ->setParameter(2, $this->request?->getClientIp())
             ->setParameter(3, $nac)
             ->execute()
         ;
@@ -419,7 +399,7 @@ final class NacManager
 
     /**
      * Revoke access to Internet with NAC.
-     * If no NAC supplied, the auto detection of current NAC will tried.
+     * If no NAC supplied, the auto-detection of current NAC will be tried.
      */
     public function revokeInternet(string $ip): FlashMessageBag
     {

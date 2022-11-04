@@ -39,12 +39,12 @@ use Symfony\Component\Validator\Constraint;
  */
 final class Nac extends Constraint
 {
-    public $message = 'This is not a valid NAC.';
+    public string $message = 'This is not a valid NAC.';
 
     /**
      * {@inheritdoc}
      */
-    public function getTargets()
+    public function getTargets(): array|string
     {
         return self::PROPERTY_CONSTRAINT;
     }

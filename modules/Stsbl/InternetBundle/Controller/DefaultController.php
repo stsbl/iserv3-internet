@@ -90,10 +90,8 @@ final class DefaultController extends AbstractPageController
     /**
      * @Route("/internet", name="internet_index")
      * @Template()
-     *
-     * @return array|RedirectResponse
      */
-    public function index(Config $config, Request $request)
+    public function index(Config $config, Request $request): RedirectResponse|array
     {
         if (!$config->get('Activation')) {
             throw $this->createAccessDeniedException('The internet module is not available, if activation is disabled.');

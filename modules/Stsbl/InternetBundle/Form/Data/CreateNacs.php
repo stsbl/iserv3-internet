@@ -48,39 +48,25 @@ final class CreateNacs
     /**
      * @Assert\NotBlank()
      * @Assert\GreaterThan(value="0")
-     *
-     * @var int|null
      */
-    private $duration;
+    private ?int $duration;
 
     /**
      * @Assert\NotBlank()
      * @Assert\Choice(choices={"free_usage", "group", "user", "all"})
-     * @var string|null
      */
-    private $assignment;
+    private ?string $assignment;
 
     /**
      * @Assert\NotBlank()
-     *
-     * @var User
      */
-    private $creator;
+    private User $creator;
 
-    /**
-     * @var User|null
-     */
-    private $user;
+    private ?User $user;
 
-    /**
-     * @var Group|null
-     */
-    private $group;
+    private ?Group $group;
 
-    /**
-     * @var int|null
-     */
-    private $count;
+    private ?int $count;
 
     public function __construct(User $creator)
     {

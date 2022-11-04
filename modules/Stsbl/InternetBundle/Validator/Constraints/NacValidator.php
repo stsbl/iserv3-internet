@@ -43,20 +43,10 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 final class NacValidator extends ConstraintValidator
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var UserStorageInterface
-     */
-    private $securityHandler;
-
-    public function __construct(EntityManagerInterface $em, UserStorageInterface $userStorage)
-    {
-        $this->em = $em;
-        $this->securityHandler = $userStorage;
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly UserStorageInterface $userStorage,
+    ) {
     }
 
     /**
@@ -80,7 +70,7 @@ final class NacValidator extends ConstraintValidator
             return;
         }
 
-        if ($nacEntity->getUser() !== $this->securityHandler->getUser() && $nacEntity->getUser() !== null) {
+        if ($nacEntity->getUser() !== $this->userStorage->getUser() && $nacEntity->getUser() !== null) {
             $this->context->buildViolation($constraint->getWrongOwnerMessage())->atPath('nac')->addViolation();
         }
     }

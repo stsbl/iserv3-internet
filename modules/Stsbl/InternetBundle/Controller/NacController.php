@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stsbl\InternetBundle\Controller;
 
+use IServ\CoreBundle\Entity\User;
 use IServ\CrudBundle\Controller\StrictCrudController;
 use IServ\Library\Config\Config;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -12,8 +13,11 @@ use Stsbl\InternetBundle\Entity\Nac;
 use Stsbl\InternetBundle\Form\Data\CreateNacs;
 use Stsbl\InternetBundle\Form\Type\NacCreateType;
 use Stsbl\InternetBundle\Service\NacManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Webmozart\Assert\Assert;
 
 /*
  * The MIT License
@@ -50,16 +54,14 @@ use Symfony\Component\Routing\Annotation\Route;
 final class NacController extends StrictCrudController
 {
     /**
-     * @var NacManager
-     */
-    private $nacManager;
-
-    /**
      * {@inheritdoc}
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): array|RedirectResponse|Response
     {
-        $data = new CreateNacs($this->authenticatedUser());
+        $creator = $this->authenticatedUser();
+        Assert::isInstanceOf($creator, User::class);
+
+        $data = new CreateNacs($creator);
 
         // NAC add form
         $addForm = $this->createForm(NacCreateType::class, $data, ['default_credits' => 45]);

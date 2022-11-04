@@ -46,35 +46,27 @@ class Nac implements CrudInterface
      * @ORM\Column(type="text", nullable=false)
      * @ORM\Id
      * @Assert\NotBlank()
-     *
-     * @var string
      */
-    private $nac;
+    private ?string $nac;
 
     /**
      * @ORM\ManyToOne(targetEntity="\IServ\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="owner", referencedColumnName="act")
-     *
-     * @var User
      */
-    private $owner;
+    private ?User $owner;
 
     /**
      * @ORM\ManyToOne(targetEntity="\IServ\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="act", referencedColumnName="act")
-     *
-     * @var User
      */
-    private $user;
+    private ?User $user;
 
     /**
      * @ORM\Column(type="inet", nullable=true)
      * @Assert\NotBlank()
      * @Assert\Ip()
-     *
-     * @var string
      */
-    private $ip;
+    private ?string $ip;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -82,35 +74,27 @@ class Nac implements CrudInterface
      *
      * @var string|null
      */
-    private $remain;
+    private ?string $remain;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null
      */
-    private $timer;
+    private ?string $timer;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     *
-     * @var \DateTime
      */
-    private $expire;
+    private ?\DateTime $expire;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
-     *
-     * @var \DateTimeImmutable
      */
-    private $created;
+    private \DateTimeImmutable $created;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     *
-     * @var \DateTime
      */
-    private $assigned;
+    private ?\DateTime $assigned;
 
     /**
      * The constructor

@@ -42,14 +42,9 @@ use Twig\TwigFilter;
  */
 final class Time extends AbstractExtension
 {
-    /**
-     * @var ConnectionFactory
-     */
-    private $connectionFactory;
-
-    public function __construct(ConnectionFactory $connectionFactory)
-    {
-        $this->connectionFactory = $connectionFactory;
+    public function __construct(
+        private readonly ConnectionFactory $connectionFactory,
+    ) {
     }
 
     /**
