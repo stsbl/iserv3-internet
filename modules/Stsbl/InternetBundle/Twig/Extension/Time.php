@@ -6,7 +6,7 @@ namespace Stsbl\InternetBundle\Twig\Extension;
 
 use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
 use Doctrine\DBAL\Driver\Exception;
-use IServ\CoreBundle\Util\Format;
+use IServ\Library\Translation\Date\Format;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -68,8 +68,8 @@ final class Time extends AbstractExtension
         $db = $this->connectionFactory->createConnection(['pdo' => new \PDO('pgsql:dbname=iserv', 'symfony')]);
         try {
             $statement = $db->prepare('SELECT EXTRACT(EPOCH FROM ?::interval)');
-            $statement->execute([$interval]);
-            $seconds = (float)$statement->fetchAssociative()['date_part'];
+            $result = $statement->executeQuery([$interval]);
+            $seconds = (float)$result->fetchAssociative()['date_part'];
         } catch (Exception $e) {
             throw new \RuntimeException('Could not fetch.', 0, $e);
         }
