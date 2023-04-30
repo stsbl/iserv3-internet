@@ -1,17 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# TRANSLATION CATALOG OF STSBL-ISERV3-INTERNET.
+# Copyright (C) 2023 IServ GmbH
+# This file is distributed under the same license as the stsbl-iserv3-internet package.
+# IServ GmbH <info@iserv.eu>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 19:22+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: stsbl-iserv3-internet\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +21,7 @@ msgstr ""
 msgid "Assigned to"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 #, php-format
 msgid "By: %s"
 msgstr ""
@@ -35,7 +30,7 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
 msgid "Create new NACs"
 msgstr ""
 
@@ -60,21 +55,21 @@ msgid "Grant access"
 msgstr ""
 
 #: priv/internet modules/Stsbl/InternetBundle/Crud/NacCrud.php
-#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
 #: modules/Stsbl/InternetBundle/EventListener/MenuListener.php
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet Access"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet access denied"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet access granted"
 msgstr ""
 
@@ -86,12 +81,12 @@ msgstr ""
 msgid "Internet access with NAC successful revoked."
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet activation not possible"
 msgstr ""
 
 #: modules/Stsbl/InternetBundle/Crud/NacCrud.php
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Manage NACs"
 msgstr ""
 
@@ -104,7 +99,7 @@ msgstr ""
 msgid "NAC"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/print.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Nac/print.html.twig.php
 #, php-format
 msgid "NACs created by: %s"
 msgstr ""
@@ -118,7 +113,7 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/List/field_status.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/List/field_status.html.twig.php
 msgid "Offline"
 msgstr ""
 
@@ -130,7 +125,7 @@ msgstr ""
 msgid "Please choose a user"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Nac/index.html.twig.php
 msgid "Print unassigned NACs"
 msgstr ""
 
@@ -138,7 +133,7 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 #, php-format
 msgid "Remaining time: %s"
 msgstr ""
@@ -157,7 +152,7 @@ msgid_plural "The NACs have been created."
 msgstr[0] ""
 msgstr[1] ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "The internet activation is only available from LAN hosts."
 msgstr ""
 
@@ -179,7 +174,7 @@ msgstr ""
 msgid "This value should be less than or equal to %s."
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 #, php-format
 msgid "Until: %s"
 msgstr ""
@@ -188,7 +183,7 @@ msgstr ""
 msgid "You not own this NAC."
 msgstr ""
 
-#: /tmp/twig2php-stsbl-iserv3-internet/modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
+#: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "You still have an active NAC. You may revoke it now:"
 msgstr ""
 
