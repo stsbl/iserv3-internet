@@ -41,7 +41,6 @@ use IServ\Library\Config\Config;
  */
 final class MenuListener implements MainMenuListenerInterface
 {
-
     public function __construct(
         private readonly Config $config
     ) {

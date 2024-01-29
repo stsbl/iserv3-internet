@@ -122,8 +122,8 @@ final class NacManager
     {
         // ignore if host is not in host management
         if ($this->em->getRepository(\IServ\HostBundle\Entity\Host::class)->findOneByIp(
-                $this->request->getClientIp()
-            ) === null) {
+            $this->request->getClientIp()
+        ) === null) {
             return false;
         }
 
