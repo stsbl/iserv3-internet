@@ -1,7 +1,7 @@
 # TRANSLATION CATALOG OF STSBL-ISERV3-INTERNET.
-# Copyright (C) 2023 IServ GmbH
+# Copyright (C) 2024 IServ GmbH
 # This file is distributed under the same license as the stsbl-iserv3-internet package.
-# IServ GmbH <info@iserv.eu>, 2023.
+# IServ GmbH <info@iserv.eu>, 2024.
 #
 #, fuzzy
 msgid ""
@@ -54,9 +54,9 @@ msgstr ""
 msgid "Grant access"
 msgstr ""
 
-#: priv/internet modules/Stsbl/InternetBundle/Crud/NacCrud.php
+#: priv/internet modules/Stsbl/InternetBundle/Controller/DefaultController.php
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: modules/Stsbl/InternetBundle/EventListener/MenuListener.php
-#: modules/Stsbl/InternetBundle/Controller/DefaultController.php
 #: modules/Stsbl/InternetBundle/Resources/views/Default/index.html.twig.php
 msgid "Internet"
 msgstr ""
@@ -94,8 +94,8 @@ msgstr ""
 msgid "Management of NACs"
 msgstr ""
 
-#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
 #: modules/Stsbl/InternetBundle/Controller/DefaultController.php
+#: modules/Stsbl/InternetBundle/Crud/NacCrud.php
 msgid "NAC"
 msgstr ""
 
